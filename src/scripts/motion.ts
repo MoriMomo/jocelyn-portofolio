@@ -114,15 +114,20 @@ function setupWordmarkMotion(splits: SplitText[]): void {
   }
 
   if (meta.length > 0) {
-    gsap.from(meta, {
-      y: 16,
-      opacity: 0,
-      duration: 0.65,
-      delay: 0.1,
-      stagger: 0.08,
-      ease: 'power3.out',
-      clearProps: 'transform,opacity',
-    });
+    gsap.fromTo(
+      meta,
+      { y: 28, opacity: 0, scale: 0.96 },
+      {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 0.72,
+        delay: 0.24,
+        stagger: 0.12,
+        ease: 'back.out(1.4)',
+        clearProps: 'transform,opacity',
+      },
+    );
   }
 
   setupHeroScroll();
@@ -254,6 +259,10 @@ export function initMotion(): () => void {
     setupScrubbedChars(splits);
     setupFadeUpBlocks();
   });
+
+  if (document.querySelector('[data-preloader]')) {
+    gsap.set('[data-wordmark-char], [data-hero-meta]', { opacity: 0 });
+  }
 
   runPreloader(() => {
     ctx.add(() => setupWordmarkMotion(splits));
