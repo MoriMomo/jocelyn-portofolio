@@ -27,9 +27,9 @@ test.describe('Jocelyn Lau Portfolio Smoke & Review Suite', () => {
     expect(res?.status()).toBe(200);
 
     await expect(page.locator('h1')).toContainText('Jocelyn Lau');
-    await expect(page.locator('.hero__hook')).toContainText('Building growth strategies');
+    await expect(page.locator('.hero__hook')).toContainText('Case-tested growth, export, and Gen Z brand strategy');
     await expect(page.locator('[data-jkt-clock]')).toHaveText(/^JKT \d{2}:\d{2}$/);
-    await expect(page.locator('[data-scrub-chars]')).toContainText('Strategy should do more');
+    await expect(page.locator('[data-scrub-chars]')).toContainText('Field research, margin math, and Gen Z buyer behavior');
     await expect(page.locator('.roll-link .roll-text[data-text]').first()).toBeVisible();
     await expect(page.locator('.site-marquee')).toBeVisible();
 
