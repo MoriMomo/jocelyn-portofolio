@@ -142,7 +142,13 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
 </section>
 
 <script>
+  let workController: AbortController | null = null;
+
   function setupWorkList() {
+    workController?.abort();
+    workController = new AbortController();
+    const { signal } = workController;
+
     const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
     const rows = document.querySelectorAll<HTMLElement>('[data-work-row]');
     const previewContainer = document.querySelector<HTMLElement>('[data-work-preview]');
@@ -162,9 +168,13 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
     };
 
     buttons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        applyFilter(btn.dataset.filter || 'all');
-      });
+      btn.addEventListener(
+        'click',
+        () => {
+          applyFilter(btn.dataset.filter || 'all');
+        },
+        { signal },
+      );
     });
 
     // If navigated via #leadership anchor, filter to Leadership & Community
@@ -174,7 +184,7 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
         document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' });
       }
     };
-    window.addEventListener('hashchange', checkHash);
+    window.addEventListener('hashchange', checkHash, { signal });
     checkHash();
 
     // Floating hover preview for fine pointer devices when reduced-motion is off
@@ -184,27 +194,40 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
     if (!canHover || reducedMotion || !previewContainer) return;
 
     rows.forEach((row) => {
-      row.addEventListener('mouseenter', () => {
-        const idx = row.dataset.previewIndex;
-        previewContainer.classList.add('is-visible');
-        previewCards.forEach((card) => {
-          card.classList.toggle('is-active', card.dataset.previewCard === idx);
-        });
-      });
+      row.addEventListener(
+        'mouseenter',
+        () => {
+          const idx = row.dataset.previewIndex;
+          previewContainer.classList.add('is-visible');
+          previewCards.forEach((card) => {
+            card.classList.toggle('is-active', card.dataset.previewCard === idx);
+          });
+        },
+        { signal },
+      );
 
-      row.addEventListener('mouseleave', () => {
-        previewContainer.classList.remove('is-visible');
-      });
+      row.addEventListener(
+        'mouseleave',
+        () => {
+          previewContainer.classList.remove('is-visible');
+        },
+        { signal },
+      );
 
-      row.addEventListener('mousemove', (e: MouseEvent) => {
-        const x = Math.min(window.innerWidth - 360, e.clientX + 28);
-        const y = Math.min(window.innerHeight - 250, Math.max(80, e.clientY - 110));
-        previewContainer.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-      });
+      row.addEventListener(
+        'mousemove',
+        (e: MouseEvent) => {
+          const x = Math.min(window.innerWidth - 360, e.clientX + 28);
+          const y = Math.min(window.innerHeight - 250, Math.max(80, e.clientY - 110));
+          previewContainer.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        },
+        { signal },
+      );
     });
   }
 
   document.addEventListener('astro:page-load', setupWorkList);
+  document.addEventListener('astro:before-swap', () => workController?.abort());
 </script>
 
 <style>

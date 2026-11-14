@@ -94,12 +94,30 @@ test.describe('Jocelyn Lau Portfolio Smoke & Review Suite', () => {
     const firstThumb = page.locator('.work-row__thumb').first();
     await expect(firstThumb).toBeVisible();
 
-    // Mobile menu opens and closes with Escape
+    // Mobile menu opens, traps Tab focus inside header/dialog, and closes with Escape
     const toggle = page.locator('[data-menu-toggle]');
     await toggle.click();
     await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+
+    // Tab through all 6 links inside mobile-menu; next Tab should wrap back inside header/menu
+    for (let i = 0; i < 6; i++) {
+      await page.keyboard.press('Tab');
+    }
+    const activeInHeader = await page.evaluate(() => {
+      const active = document.activeElement;
+      return Boolean(active && active.closest('.site-header'));
+    });
+    expect(activeInHeader, 'Tab focus should remain trapped inside mobile header/menu').toBe(true);
+
     await page.keyboard.press('Escape');
     await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+
+    // Skip to content link becomes visible on focus
+    const skipLink = page.locator('a.sr-only[href="#main-content"]');
+    await skipLink.focus();
+    const skipBox = await skipLink.boundingBox();
+    expect(skipBox?.width ?? 0).toBeGreaterThan(20);
+    expect(skipBox?.height ?? 0).toBeGreaterThan(15);
   });
 
   test('reduced motion: all [data-reveal] elements have computed opacity 1 immediately', async ({ browser }) => {
