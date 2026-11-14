@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import portraitImg from '../assets/portrait.jpg';
+import Grainient from './Grainient.astro';
 
 const competencies = [
   {
@@ -34,67 +35,84 @@ const competencies = [
 ---
 
 <section id="credentials" class="about-section hairline-top" aria-labelledby="about-heading">
-  <div class="container about-section__grid">
-    <!-- Left Column: Portrait & Executive Statement -->
-    <div class="about-profile" data-reveal="up">
+  <Grainient
+    colors={['#111113', '#1c090b', '#4d080a', '#830000', '#bc0202']}
+    angle={125}
+    flow={0.75}
+    speed={0.45}
+    silk={0.3}
+    grainAmount={0.07}
+    contrast={0.95}
+    saturation={0.9}
+    className="about-section__bg"
+  />
+
+  <div class="container about-section__inner">
+    <header class="about-header" data-reveal="up">
       <p class="eyebrow">Profile & Vision</p>
       <h2 id="about-heading" class="serif-heading about-profile__title" data-reveal="lines">
         Taking Indonesian UMKM from Local Shelves to Export Markets
       </h2>
+    </header>
 
-      <div class="about-profile__card">
-        <div class="about-profile__portrait-wrap">
-          <Image
-            src={portraitImg}
-            alt="Jocelyn Lau in formal business blazer"
-            width={360}
-            height={460}
-            loading="eager"
-            class="about-profile__portrait"
-          />
-        </div>
-        <div class="about-profile__bio">
-          <p>
-            I am an <strong>International Business Management</strong> student at <strong>Bina Nusantara University (BINUS)</strong>, shaped by representing Indonesia at the International Business Competition finals in Singapore.
-          </p>
-          <p>
-            My goal is practical: help Indonesian <strong>UMKM</strong> build the product positioning, export readiness, and operational discipline needed to compete abroad and create steady local jobs.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Right Column: Education, Honors & Competencies -->
-    <div class="about-credentials" data-reveal="up">
-      <div class="credential-box">
-        <p class="eyebrow credential-box__eyebrow">Academic Background</p>
-        <div class="credential-box__row">
-          <div>
-            <h3 class="serif-heading credential-box__school">Bina Nusantara University (BINUS)</h3>
-            <p class="credential-box__major">Undergraduate · International Business Management</p>
+    <div class="about-section__grid">
+      <!-- Left Column: Portrait & Executive Statement -->
+      <div class="about-profile" data-reveal="up">
+        <div class="about-profile__card">
+          <div class="about-profile__portrait-wrap">
+            <Image
+              src={portraitImg}
+              alt="Jocelyn Lau in formal business blazer"
+              width={360}
+              height={460}
+              loading="eager"
+              class="about-profile__portrait"
+            />
           </div>
-          <span class="badge badge--cream">Active Student</span>
+          <div class="about-profile__bio">
+            <p class="eyebrow about-profile__card-eyebrow">Executive Summary</p>
+            <p>
+              I am an <strong>International Business Management</strong> student at <strong>Bina Nusantara University (BINUS)</strong>, shaped by representing Indonesia at the International Business Competition finals in Singapore.
+            </p>
+            <p>
+              My goal is practical: help Indonesian <strong>UMKM</strong> build the product positioning, export readiness, and operational discipline needed to compete abroad and create steady local jobs.
+            </p>
+          </div>
         </div>
-        <p class="credential-box__note">
-          Active Project Manager and Case Competitor within <strong>Do Well Do Good (DWDG) Future Leaders — BINUS Chapter</strong> and <strong>Students x CEOs (Sxcelerate)</strong>.
-        </p>
       </div>
 
-      <div class="competencies">
-        <p class="eyebrow">Core Competencies</p>
-        <div class="competencies__list">
-          {
-            competencies.map((group) => (
-              <div class="competency-group hairline-top">
-                <h3 class="competency-group__title">{group.category}</h3>
-                <ul class="competency-group__items">
-                  {group.skills.map((skill) => (
-                    <li>{skill}</li>
-                  ))}
-                </ul>
-              </div>
-            ))
-          }
+      <!-- Right Column: Education, Honors & Competencies -->
+      <div class="about-credentials" data-reveal="up">
+        <div class="credential-box">
+          <p class="eyebrow credential-box__eyebrow">Academic Background</p>
+          <div class="credential-box__row">
+            <div>
+              <h3 class="serif-heading credential-box__school">Bina Nusantara University (BINUS)</h3>
+              <p class="credential-box__major">Undergraduate · International Business Management</p>
+            </div>
+            <span class="badge badge--cream">Active Student</span>
+          </div>
+          <p class="credential-box__note">
+            Active Project Manager and Case Competitor within <strong>Do Well Do Good (DWDG) Future Leaders — BINUS Chapter</strong> and <strong>Students x CEOs (Sxcelerate)</strong>.
+          </p>
+        </div>
+
+        <div class="competencies">
+          <p class="eyebrow">Core Competencies</p>
+          <div class="competencies__list">
+            {
+              competencies.map((group) => (
+                <div class="competency-group hairline-top">
+                  <h3 class="competency-group__title">{group.category}</h3>
+                  <ul class="competency-group__items">
+                    {group.skills.map((skill) => (
+                      <li>{skill}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            }
+          </div>
         </div>
       </div>
     </div>
@@ -103,37 +121,71 @@ const competencies = [
 
 <style>
   .about-section {
+    position: relative;
+    overflow: hidden;
     padding-block: var(--space-2xl);
-    background-color: var(--surface-elevated);
+    background-color: var(--bg-dark);
+  }
+
+  .about-section__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.88;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%);
+  }
+
+  .about-section__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .about-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    max-width: 28ch;
   }
 
   .about-section__grid {
     display: grid;
-    grid-template-columns: 1.05fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: var(--space-xl);
-    align-items: start;
+    align-items: stretch;
   }
 
   .about-profile {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
   }
 
   .about-profile__title {
     font-size: var(--step-3);
-    margin-bottom: var(--space-xs);
+    margin-bottom: 0;
   }
 
   .about-profile__card {
+    flex: 1;
     display: grid;
     grid-template-columns: 200px 1fr;
     gap: var(--space-md);
-    align-items: start;
-    background-color: var(--bg-light);
+    align-items: center;
+    background-color: rgba(17, 17, 19, 0.78);
+    backdrop-filter: blur(12px);
     padding: var(--space-md);
     border: 1px solid var(--border-strong);
+    border-top: 3px solid var(--red);
     border-radius: var(--radius-md);
+  }
+
+  .about-profile__card-eyebrow {
+    color: var(--red);
+    margin-bottom: 0.15rem;
   }
 
   .about-profile__portrait-wrap {
@@ -164,7 +216,8 @@ const competencies = [
   }
 
   .credential-box {
-    background-color: var(--blue-tint);
+    background-color: rgba(17, 17, 19, 0.78);
+    backdrop-filter: blur(12px);
     border: 1px solid var(--border-strong);
     border-top: 3px solid var(--red);
     border-radius: var(--radius-md);

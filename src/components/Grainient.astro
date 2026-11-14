@@ -1,0 +1,99 @@
+---
+import { DEFAULT_COLORS, type GrainientProps } from '../scripts/grainient/types';
+
+type Props = GrainientProps;
+
+const {
+  colors = DEFAULT_COLORS,
+  type = 'linear',
+  angle = 55,
+  bands = 1,
+  speed = 1,
+  flow = 0.8,
+  scale = 1,
+  softness = 1,
+  silk = 0.35,
+  grainAmount = 0.08,
+  grainSize = 1.2,
+  grainAnimated = true,
+  contrast = 1,
+  saturation = 1,
+  variation = 0,
+  interactive = true,
+  stir = 1,
+  clickSwirl = true,
+  intro = true,
+  lightMode = false,
+  dpr,
+  className = '',
+} = Astro.props;
+
+const options: GrainientProps = {
+  colors,
+  type,
+  angle,
+  bands,
+  speed,
+  flow,
+  scale,
+  softness,
+  silk,
+  grainAmount,
+  grainSize,
+  grainAnimated,
+  contrast,
+  saturation,
+  variation,
+  interactive,
+  stir,
+  clickSwirl,
+  intro,
+  lightMode,
+  dpr,
+};
+---
+
+<div
+  class:list={['grainient-container', className]}
+  data-grainient={JSON.stringify(options)}
+  aria-hidden="true"
+>
+  <canvas class="grainient-canvas" aria-hidden="true"></canvas>
+</div>
+
+<script>
+  import { mountGrainient } from '../scripts/grainient/mount';
+
+  let cleanups: Array<() => void> = [];
+
+  function initAllGrainient(): void {
+    cleanups.forEach((fn) => fn());
+    cleanups = [];
+    document.querySelectorAll<HTMLElement>('[data-grainient]').forEach((el) => {
+      cleanups.push(mountGrainient(el));
+    });
+  }
+
+  document.addEventListener('astro:page-load', initAllGrainient);
+  document.addEventListener('astro:before-swap', () => {
+    cleanups.forEach((fn) => fn());
+    cleanups = [];
+  });
+</script>
+
+<style>
+  .grainient-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .grainient-canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>
