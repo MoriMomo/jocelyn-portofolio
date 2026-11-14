@@ -1,28 +1,31 @@
 ---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const homeHref = `${base}/`;
+
 const navLinks = [
-  { href: '/#work', label: 'Selected Work' },
-  { href: '/#highlights', label: 'Highlights' },
-  { href: '/#credentials', label: 'Credentials' },
-  { href: '/#contact', label: 'Contact' },
+  { href: `${base}/#work`, label: 'Selected Work' },
+  { href: `${base}/#highlights`, label: 'Highlights' },
+  { href: `${base}/#credentials`, label: 'Credentials' },
+  { href: `${base}/#contact`, label: 'Contact' },
 ];
 
-const isHome = Astro.url.pathname === '/';
+const isHome = Astro.url.pathname === '/' || Astro.url.pathname === homeHref;
 ---
 
 <header class={`site-header surface-dark ${isHome ? 'site-header--home' : 'site-header--sub'}`}>
   <div class="container site-header__bar">
-    <a href="/" class="site-header__brand roll-link" aria-label="Jocelyn Lau — Home">
+    <a href={homeHref} class="site-header__brand roll-link" aria-label="Jocelyn Lau — Home">
       <span class="roll-text" data-text="JOCELYNLAU.WORK">JOCELYNLAU.WORK</span>
     </a>
 
     <nav class="site-header__quick" aria-label="Quick navigation">
-      <a href="/#work" class="site-header__quick-link roll-link">
+      <a href={`${base}/#work`} class="site-header__quick-link roll-link">
         <span class="roll-text" data-text="WORK">WORK</span>
       </a>
-      <a href="/#credentials" class="site-header__quick-link roll-link">
+      <a href={`${base}/#credentials`} class="site-header__quick-link roll-link">
         <span class="roll-text" data-text="ABOUT">ABOUT</span>
       </a>
-      <a href="/#contact" class="site-header__quick-link roll-link">
+      <a href={`${base}/#contact`} class="site-header__quick-link roll-link">
         <span class="roll-text" data-text="CONTACT">CONTACT</span>
       </a>
     </nav>
@@ -34,7 +37,7 @@ const isHome = Astro.url.pathname === '/';
   </div>
 
   <div class="site-dock" aria-label="Corner controls">
-    <a href="/" class="dock-monogram" aria-label="Jocelyn Lau — Back to top">
+    <a href={homeHref} class="dock-monogram" aria-label="Jocelyn Lau — Back to top">
       <span>JL</span>
     </a>
 

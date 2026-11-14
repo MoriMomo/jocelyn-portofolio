@@ -1,4 +1,4 @@
-export const VERTEX_SHADER = `#version 300 es
+const VERTEX_SHADER = `#version 300 es
 out vec2 vUv;
 void main() {
   vec2 p = vec2(float((gl_VertexID << 1) & 2), float(gl_VertexID & 2));
