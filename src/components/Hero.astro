@@ -29,13 +29,13 @@ const portraitAsset = await getImage({ src: portraitImg, width: 800, format: 'we
 
     <!-- Mid-Hero Horizontal Rule Row: HI THERE · Starburst · Hook Statement -->
     <div class="hero__mid-band">
-      <div class="hero__mid-left">
+      <div class="hero__mid-left" data-hero-meta>
         <p class="hero__hi">HI THERE</p>
         <p class="hero__loc">JAKARTA · BINUS</p>
       </div>
 
       <div class="hero__star-slot" aria-hidden="true">
-        <svg class="hero__star" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <svg class="hero__star" data-hero-star width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path
             d="M12 0L13.5 9.2L22.5 5.5L15.2 11.8L24 12L15.2 12.2L22.5 18.5L13.5 14.8L12 24L10.5 14.8L1.5 18.5L8.8 12.2L0 12L8.8 11.8L1.5 5.5L10.5 9.2L12 0Z"
             fill="currentColor"
@@ -58,8 +58,8 @@ const portraitAsset = await getImage({ src: portraitImg, width: 800, format: 'we
       <span class="sr-only">Jocelyn Lau — Business Strategy, Consulting & Leadership Portfolio</span>
       <Wordmark variant="hero" />
       <span class="hero__strategy-row" aria-hidden="true">
-        <span class="hero__strategy-meta">IBM · BINUS UNIVERSITY</span>
-        <span class="hero__strategy-word">.<span class="hero__strategy-italic">STR</span>ATEGY</span>
+        <span class="hero__strategy-meta" data-hero-meta>IBM · BINUS UNIVERSITY</span>
+        <span class="hero__strategy-word" data-hero-strategy>.<span class="hero__strategy-italic">STR</span>ATEGY</span>
       </span>
     </h1>
   </div>

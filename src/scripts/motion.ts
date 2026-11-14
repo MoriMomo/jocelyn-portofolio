@@ -14,17 +14,71 @@ function revealReducedMotion(): void {
   });
 }
 
-function setupWordmarkMotion(): void {
-  const chars = document.querySelectorAll<HTMLElement>('[data-wordmark-char]');
-  if (chars.length === 0) return;
+function setupHeroScroll(): void {
+  const hero = document.querySelector<HTMLElement>('.hero');
+  if (!hero) return;
 
-  gsap.from(chars, {
-    yPercent: 28,
-    duration: 0.72,
-    stagger: 0.025,
-    ease: 'power3.out',
-    clearProps: 'transform',
-  });
+  const display = hero.querySelector<HTMLElement>('.hero__display');
+  const star = hero.querySelector<HTMLElement>('[data-hero-star]');
+  if (display) {
+    gsap.to(display, {
+      y: -36,
+      ease: 'none',
+      scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: 0.8 },
+    });
+  }
+  if (star) {
+    gsap.to(star, {
+      rotation: 180,
+      ease: 'none',
+      scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: 0.8 },
+    });
+  }
+}
+
+function setupWordmarkMotion(splits: SplitText[]): void {
+  const chars = document.querySelectorAll<HTMLElement>('[data-wordmark-char]');
+  const strategy = document.querySelector<HTMLElement>('[data-hero-strategy]');
+  const meta = document.querySelectorAll<HTMLElement>('[data-hero-meta]');
+
+  if (chars.length > 0) {
+    gsap.from(chars, {
+      yPercent: 60,
+      opacity: 0,
+      duration: 0.85,
+      stagger: 0.025,
+      ease: 'power4.out',
+      clearProps: 'transform,opacity',
+    });
+  }
+
+  if (strategy) {
+    const split = new SplitText(strategy, { type: 'chars' });
+    splits.push(split);
+    gsap.from(split.chars, {
+      yPercent: 55,
+      opacity: 0,
+      duration: 0.75,
+      delay: 0.14,
+      stagger: 0.025,
+      ease: 'power4.out',
+      clearProps: 'transform,opacity',
+    });
+  }
+
+  if (meta.length > 0) {
+    gsap.from(meta, {
+      y: 16,
+      opacity: 0,
+      duration: 0.65,
+      delay: 0.1,
+      stagger: 0.08,
+      ease: 'power3.out',
+      clearProps: 'transform,opacity',
+    });
+  }
+
+  setupHeroScroll();
 }
 
 function setupLineReveals(splits: SplitText[]): void {
@@ -36,14 +90,15 @@ function setupLineReveals(splits: SplitText[]): void {
     splits.push(split);
 
     gsap.from(split.lines, {
-      y: 18,
-      duration: 0.6,
-      stagger: 0.07,
+      y: 34,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.09,
       ease: 'power3.out',
-      clearProps: 'transform',
+      clearProps: 'transform,opacity',
       scrollTrigger: {
         trigger: heading,
-        start: 'top 95%',
+        start: 'top 88%',
         once: true,
       },
     });
@@ -59,7 +114,7 @@ function setupScrubbedChars(splits: SplitText[]): void {
 
     gsap.fromTo(
       split.chars,
-      { opacity: 0.48, y: 10 },
+      { opacity: 0.14, y: 16 },
       {
         opacity: 1,
         y: 0,
@@ -67,9 +122,9 @@ function setupScrubbedChars(splits: SplitText[]): void {
         ease: 'power2.out',
         scrollTrigger: {
           trigger: heading,
-          start: 'top 94%',
-          end: 'top 62%',
-          scrub: true,
+          start: 'top 86%',
+          end: 'top 32%',
+          scrub: 0.6,
         },
       },
     );
@@ -77,18 +132,23 @@ function setupScrubbedChars(splits: SplitText[]): void {
 }
 
 function setupFadeUpBlocks(): void {
-  document.querySelectorAll<HTMLElement>('[data-reveal="up"]').forEach((el) => {
-    gsap.from(el, {
-      y: 14,
-      duration: 0.5,
-      ease: 'power2.out',
-      clearProps: 'transform',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 96%',
-        once: true,
-      },
-    });
+  const targets = gsap.utils.toArray<HTMLElement>('[data-reveal="up"]');
+  if (targets.length === 0) return;
+
+  gsap.set(targets, { opacity: 0, y: 30 });
+  ScrollTrigger.batch(targets, {
+    start: 'top 90%',
+    once: true,
+    onEnter: (batch) => {
+      gsap.to(batch, {
+        opacity: 1,
+        y: 0,
+        duration: 0.72,
+        stagger: 0.08,
+        ease: 'power3.out',
+        clearProps: 'transform,opacity',
+      });
+    },
   });
 }
 
@@ -143,15 +203,20 @@ export function initMotion(): () => void {
   const controller = new AbortController();
 
   const ctx = gsap.context(() => {
-    setupWordmarkMotion();
+    setupWordmarkMotion(splits);
     setupLineReveals(splits);
     setupScrubbedChars(splits);
     setupFadeUpBlocks();
   });
 
   setupCursorPill(controller.signal);
+  let alive = true;
+  document.fonts?.ready.then(() => {
+    if (alive) ScrollTrigger.refresh();
+  });
 
   const cleanup = () => {
+    alive = false;
     controller.abort();
     ctx.revert();
     splits.forEach((s) => s.revert());
