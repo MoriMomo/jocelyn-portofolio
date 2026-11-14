@@ -1,10 +1,10 @@
 ---
 import { getImage } from 'astro:assets';
-import portraitImg from '../assets/portrait.jpg';
+import lanyardPortraitImg from '../assets/lanyard-portrait.jpg';
 import Lanyard from './Lanyard.astro';
 import Wordmark from './Wordmark.astro';
 
-const portraitAsset = await getImage({ src: portraitImg, width: 800, format: 'webp' });
+const portraitAsset = await getImage({ src: lanyardPortraitImg, width: 800, format: 'webp' });
 ---
 
 <section id="top" class="hero surface-dark" aria-labelledby="hero-heading">
@@ -14,7 +14,7 @@ const portraitAsset = await getImage({ src: portraitImg, width: 800, format: 'we
       <Lanyard
         frontImage={portraitAsset.src}
         alt="Jocelyn Lau, Business Strategist and International Business Management Scholar"
-        cardColor="#000000"
+        cardColor="#111113"
         strapColor="#830000"
         metal="silver"
         finish="glossy"
@@ -85,9 +85,9 @@ const portraitAsset = await getImage({ src: portraitImg, width: 800, format: 'we
 
   .hero__portrait-wrap {
     position: absolute;
-    left: clamp(10%, 19vw, 25%);
+    left: clamp(4%, 11vw, 18%);
     top: -0.5rem;
-    width: clamp(18rem, 34vw, 28rem);
+    width: clamp(24rem, 46vw, 40rem);
     height: clamp(26rem, 68vh, 42rem);
     z-index: 2;
     pointer-events: auto;
