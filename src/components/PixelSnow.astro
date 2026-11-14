@@ -1,0 +1,97 @@
+---
+import type { PixelSnowProps } from '../scripts/pixelSnow/types';
+
+type Props = PixelSnowProps;
+
+const {
+  color = '#ffffff',
+  variant = 'snowflake',
+  density = 0.5,
+  speed = 1,
+  wind = 0.25,
+  sway = 0.5,
+  flakeSize = 1,
+  pixelSize = 3,
+  depth = 0.6,
+  brightness = 1,
+  glow = 0.8,
+  twinkle = 0.35,
+  accumulate = false,
+  mouseInteraction = true,
+  intro = true,
+  fade = 0,
+  opacity = 1,
+  lightMode = false,
+  paused = false,
+  dpr,
+  className = '',
+} = Astro.props;
+
+const options: PixelSnowProps = {
+  color,
+  variant,
+  density,
+  speed,
+  wind,
+  sway,
+  flakeSize,
+  pixelSize,
+  depth,
+  brightness,
+  glow,
+  twinkle,
+  accumulate,
+  mouseInteraction,
+  intro,
+  fade,
+  opacity,
+  lightMode,
+  paused,
+  dpr,
+};
+---
+
+<div
+  class:list={['pixel-snow-container', className]}
+  data-pixel-snow={JSON.stringify(options)}
+  aria-hidden="true"
+>
+  <canvas class="pixel-snow-canvas" aria-hidden="true"></canvas>
+</div>
+
+<script>
+  import { mountPixelSnow } from '../scripts/pixelSnow/mount';
+
+  let cleanups: Array<() => void> = [];
+
+  function initAllPixelSnow(): void {
+    cleanups.forEach((fn) => fn());
+    cleanups = [];
+    document.querySelectorAll<HTMLElement>('[data-pixel-snow]').forEach((el) => {
+      cleanups.push(mountPixelSnow(el));
+    });
+  }
+
+  document.addEventListener('astro:page-load', initAllPixelSnow);
+  document.addEventListener('astro:before-swap', () => {
+    cleanups.forEach((fn) => fn());
+    cleanups = [];
+  });
+</script>
+
+<style>
+  .pixel-snow-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .pixel-snow-canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>
