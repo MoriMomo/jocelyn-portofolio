@@ -1,0 +1,93 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  next: CollectionEntry<'work'>;
+  total: number;
+}
+
+const { next, total } = Astro.props;
+const num = String(next.data.order).padStart(2, '0');
+const totalStr = String(total).padStart(2, '0');
+---
+
+<aside class="next-project hairline-top" aria-label="Next case study">
+  <div class="container">
+    <a href={`/work/${next.id}`} class="next-project__link" data-reveal="up">
+      <div class="next-project__meta">
+        <span class="eyebrow">Next Case Study · {num} / {totalStr}</span>
+        <span class="badge badge--blue">{next.data.category}</span>
+      </div>
+
+      <div class="next-project__main">
+        <h2 class="serif-heading next-project__title">{next.data.title}</h2>
+        <span class="next-project__cta">Read Case Study →</span>
+      </div>
+
+      <p class="next-project__summary">{next.data.summary}</p>
+    </a>
+  </div>
+</aside>
+
+<style>
+  .next-project {
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-xl);
+  }
+
+  .next-project__link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    background-color: var(--cream);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    transition: transform var(--duration-base) var(--ease-out-expo), border-color var(--duration-fast) ease;
+  }
+
+  .next-project__link:hover {
+    transform: translateY(-3px);
+    border-color: var(--ink);
+  }
+
+  .next-project__meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .next-project__main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-md);
+  }
+
+  .next-project__title {
+    font-size: var(--step-3);
+    color: var(--ink);
+  }
+
+  .next-project__link:hover .next-project__title {
+    color: var(--red);
+  }
+
+  .next-project__cta {
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--red);
+    white-space: nowrap;
+  }
+
+  .next-project__summary {
+    color: var(--soil);
+    max-width: 68ch;
+    font-size: 0.96rem;
+  }
+</style>

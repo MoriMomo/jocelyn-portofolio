@@ -1,0 +1,168 @@
+---
+interface Metric {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  role: string;
+  org: string;
+  team?: string;
+  result?: string;
+  deckUrl?: string;
+  metrics?: Metric[];
+}
+
+const { role, org, team, result, deckUrl, metrics = [] } = Astro.props;
+---
+
+<div class="case-meta" data-reveal="up">
+  <dl class="case-meta__grid hairline-top hairline-bottom">
+    <div class="case-meta__cell">
+      <dt class="eyebrow case-meta__label">Role</dt>
+      <dd class="case-meta__value">{role}</dd>
+    </div>
+
+    <div class="case-meta__cell">
+      <dt class="eyebrow case-meta__label">Organization / Client</dt>
+      <dd class="case-meta__value">{org}</dd>
+    </div>
+
+    {
+      team && (
+        <div class="case-meta__cell">
+          <dt class="eyebrow case-meta__label">Team / Scope</dt>
+          <dd class="case-meta__value">{team}</dd>
+        </div>
+      )
+    }
+
+    {
+      result && (
+        <div class="case-meta__cell">
+          <dt class="eyebrow case-meta__label">Outcome / Recognition</dt>
+          <dd class="case-meta__value case-meta__value--highlight">{result}</dd>
+        </div>
+      )
+    }
+  </dl>
+
+  {
+    (metrics.length > 0 || deckUrl) && (
+      <div class="case-meta__bar">
+        {metrics.length > 0 && (
+          <div class="case-meta__metrics">
+            {metrics.map((m) => (
+              <div class="case-meta__metric-pill">
+                <span class="tabular serif-heading case-meta__metric-val">{m.value}</span>
+                <span class="case-meta__metric-lbl">{m.label}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {deckUrl && (
+          <a
+            href={deckUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn--primary case-meta__deck-btn"
+          >
+            View Presentation Deck ↗
+          </a>
+        )}
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .case-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-block: var(--space-lg);
+  }
+
+  .case-meta__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    background-color: var(--surface-elevated);
+  }
+
+  .case-meta__cell {
+    padding: var(--space-md);
+    border-right: 1px solid var(--border-hairline);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .case-meta__cell:last-child {
+    border-right: none;
+  }
+
+  .case-meta__label {
+    font-size: 0.72rem;
+    color: var(--soil);
+  }
+
+  .case-meta__value {
+    font-size: 0.96rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .case-meta__value--highlight {
+    color: var(--red);
+    font-weight: 600;
+  }
+
+  .case-meta__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+  }
+
+  .case-meta__metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .case-meta__metric-pill {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    background-color: var(--cream);
+    border: 1px solid var(--border-hairline);
+    padding: 0.5rem 0.9rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .case-meta__metric-val {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--red);
+  }
+
+  .case-meta__metric-lbl {
+    font-size: 0.84rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  @media (max-width: 720px) {
+    .case-meta__cell {
+      border-right: none;
+      border-bottom: 1px solid var(--border-hairline);
+      padding: var(--space-sm);
+    }
+
+    .case-meta__cell:last-child {
+      border-bottom: none;
+    }
+  }
+</style>

@@ -1,0 +1,367 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import CaseMeta from '../../components/CaseMeta.astro';
+import NextProject from '../../components/NextProject.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('work');
+  const sorted = [...entries].sort((a, b) => a.data.order - b.data.order);
+
+  return sorted.map((entry, idx) => {
+    const next = sorted[(idx + 1) % sorted.length];
+    return {
+      params: { slug: entry.id },
+      props: { entry, next, total: sorted.length },
+    };
+  });
+}
+
+const { entry, next, total } = Astro.props;
+const { Content } = await render(entry);
+const indexStr = String(entry.data.order).padStart(2, '0');
+const totalStr = String(total).padStart(2, '0');
+---
+
+<Base
+  title={`${entry.data.title} — Jocelyn Lau Case Study`}
+  description={entry.data.summary}
+>
+  <article class="case-study">
+    <div class="container">
+      <!-- Top Breadcrumb & Index -->
+      <div class="case-study__top">
+        <a href="/#work" class="case-study__back">
+          ← All Case Studies
+        </a>
+        <div class="case-study__badges">
+          <span class="tabular eyebrow">Case {indexStr} / {totalStr}</span>
+          <span
+            class:list={[
+              'badge',
+              entry.data.category === 'Strategy & Consulting' ? 'badge--cream' : 'badge--blue',
+            ]}
+          >
+            {entry.data.category}
+          </span>
+        </div>
+      </div>
+
+      <!-- Title & Executive Summary -->
+      <header class="case-study__header">
+        <h1 class="serif-heading case-study__title" data-reveal="lines">
+          {entry.data.title}
+        </h1>
+        <p class="case-study__summary" data-reveal="up">
+          {entry.data.summary}
+        </p>
+      </header>
+
+      <!-- Structured Metadata & Metrics -->
+      <CaseMeta
+        role={entry.data.role}
+        org={entry.data.org}
+        team={entry.data.team}
+        result={entry.data.result}
+        deckUrl={entry.data.deckUrl}
+        metrics={entry.data.metrics}
+      />
+
+      <!-- Cover Figure -->
+      <figure class="case-study__cover" data-reveal="up">
+        <div class="case-study__cover-frame">
+          <Image
+            src={entry.data.cover}
+            alt={entry.data.coverAlt}
+            width={1280}
+            height={760}
+            class="case-study__cover-img"
+          />
+        </div>
+      </figure>
+
+      <!-- Main Narrative Body + Sidebar -->
+      <div class="case-study__body-grid">
+        <div class="case-study__prose" data-reveal="up">
+          <Content />
+        </div>
+
+        <aside class="case-study__sidebar" data-reveal="up">
+          {
+            entry.data.learned && entry.data.learned.length > 0 && (
+              <div class="sidebar-card">
+                <p class="eyebrow sidebar-card__eyebrow">Leadership & Key Learnings</p>
+                <ul class="sidebar-card__list">
+                  {entry.data.learned.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+
+          <div class="sidebar-card sidebar-card--cream">
+            <p class="eyebrow sidebar-card__eyebrow">Project Inquiry</p>
+            <p class="sidebar-card__text">
+              Interested in walking through the full strategic framework or discussing a similar business challenge?
+            </p>
+            <a href="mailto:Jocelynlau007@gmail.com" class="btn btn--primary">
+              Discuss This Case ↗
+            </a>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Supporting Photo Gallery -->
+      {
+        entry.data.gallery && entry.data.gallery.length > 0 && (
+          <section class="case-study__gallery hairline-top" aria-label="Project gallery">
+            <p class="eyebrow">Supporting Documentation</p>
+            <div class="case-study__gallery-grid">
+              {entry.data.gallery.map((img) => (
+                <figure class="gallery-figure" data-reveal="up">
+                  <div class="gallery-figure__frame">
+                    <Image
+                      src={img.src}
+                      alt={img.alt}
+                      width={960}
+                      height={640}
+                      class="gallery-figure__img"
+                    />
+                  </div>
+                  {img.caption && <figcaption class="gallery-figure__caption">{img.caption}</figcaption>}
+                </figure>
+              ))}
+            </div>
+          </section>
+        )
+      }
+    </div>
+
+    <NextProject next={next} total={total} />
+  </article>
+</Base>
+
+<style>
+  .case-study {
+    padding-top: var(--space-lg);
+  }
+
+  .case-study__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+
+  .case-study__back {
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .case-study__back:hover {
+    color: var(--ink);
+  }
+
+  .case-study__badges {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .case-study__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    max-width: 68rem;
+  }
+
+  .case-study__title {
+    font-size: var(--step-4);
+    overflow-wrap: anywhere;
+  }
+
+  .case-study__summary {
+    font-size: var(--step-1);
+    color: var(--soil);
+    line-height: 1.5;
+    max-width: 60ch;
+  }
+
+  .case-study__cover {
+    margin-block: var(--space-lg);
+  }
+
+  .case-study__cover-frame {
+    background-color: var(--cream);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    padding: clamp(0.5rem, 1.5vw, 1.25rem);
+    overflow: hidden;
+  }
+
+  .case-study__cover-img {
+    width: 100%;
+    max-height: 640px;
+    object-fit: contain;
+    margin-inline: auto;
+    border-radius: var(--radius-sm);
+  }
+
+  .case-study__body-grid {
+    display: grid;
+    grid-template-columns: 1.45fr 0.85fr;
+    gap: var(--space-xl);
+    align-items: start;
+    padding-top: var(--space-md);
+  }
+
+  .case-study__prose :global(h2) {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 600;
+    color: var(--ink);
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-xs);
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--border-hairline);
+  }
+
+  .case-study__prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .case-study__prose :global(p) {
+    margin-bottom: var(--space-sm);
+    color: var(--ink);
+    line-height: 1.72;
+  }
+
+  .case-study__prose :global(ul) {
+    margin-bottom: var(--space-md);
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .case-study__prose :global(li) {
+    line-height: 1.65;
+    color: var(--ink);
+  }
+
+  .case-study__prose :global(strong) {
+    color: var(--red);
+    font-weight: 600;
+  }
+
+  .case-study__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    position: sticky;
+    top: 6rem;
+  }
+
+  .sidebar-card {
+    background-color: var(--surface-elevated);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .sidebar-card--cream {
+    background-color: var(--cream);
+  }
+
+  .sidebar-card__eyebrow {
+    color: var(--red);
+  }
+
+  .sidebar-card__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    font-size: 0.94rem;
+    color: var(--ink);
+  }
+
+  .sidebar-card__list li {
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .sidebar-card__list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  .sidebar-card__text {
+    font-size: 0.94rem;
+    color: var(--soil);
+    margin-bottom: 0.35rem;
+  }
+
+  .case-study__gallery {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .case-study__gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-md);
+  }
+
+  .gallery-figure {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .gallery-figure__frame {
+    background-color: var(--cream);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    padding: 0.75rem;
+  }
+
+  .gallery-figure__img {
+    width: 100%;
+    max-height: 460px;
+    object-fit: contain;
+    margin-inline: auto;
+    border-radius: var(--radius-sm);
+  }
+
+  .gallery-figure__caption {
+    font-size: 0.88rem;
+    color: var(--soil);
+  }
+
+  @media (max-width: 920px) {
+    .case-study__body-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .case-study__sidebar {
+      position: static;
+    }
+  }
+</style>
