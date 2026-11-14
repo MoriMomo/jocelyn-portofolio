@@ -7,6 +7,53 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
 
 let activeCleanup: (() => void) | null = null;
 
+function runPreloader(onExitStart: () => void): void {
+  const win = window as Window & { __preloaderDone?: boolean };
+  const overlay = document.querySelector<HTMLElement>('[data-preloader]');
+  win.__preloaderDone = true;
+  if (!overlay) {
+    onExitStart();
+    return;
+  }
+
+  const percentEl = overlay.querySelector<HTMLElement>('[data-preloader-percent]');
+  const barEl = overlay.querySelector<HTMLElement>('[data-preloader-bar]');
+  const counter = { value: 0 };
+  let exited = false;
+
+  const exitCurtain = () => {
+    if (exited) return;
+    exited = true;
+    overlay.style.pointerEvents = 'none';
+    onExitStart();
+    gsap.to(overlay, {
+      yPercent: -100,
+      duration: 0.62,
+      ease: 'power4.inOut',
+      onComplete: () => overlay.remove(),
+    });
+  };
+
+  const progressTween = gsap.to(counter, {
+    value: 100,
+    duration: 0.52,
+    ease: 'power2.out',
+    onUpdate: () => {
+      const pct = Math.round(counter.value);
+      if (percentEl) percentEl.textContent = `${String(pct).padStart(2, '0')}%`;
+      if (barEl) barEl.style.transform = `scaleX(${counter.value / 100})`;
+    },
+  });
+
+  const fontsReady = document.fonts?.ready ?? Promise.resolve();
+  const minDelay = new Promise<void>((resolve) => {
+    progressTween.eventCallback('onComplete', () => resolve());
+  });
+  const maxTimeout = new Promise<void>((resolve) => window.setTimeout(resolve, 900));
+
+  Promise.race([Promise.all([fontsReady, minDelay]), maxTimeout]).then(exitCurtain);
+}
+
 function revealReducedMotion(): void {
   document.querySelectorAll<HTMLElement>('[data-reveal], [data-scrub-chars]').forEach((el) => {
     el.style.opacity = '1';
@@ -203,10 +250,13 @@ export function initMotion(): () => void {
   const controller = new AbortController();
 
   const ctx = gsap.context(() => {
-    setupWordmarkMotion(splits);
     setupLineReveals(splits);
     setupScrubbedChars(splits);
     setupFadeUpBlocks();
+  });
+
+  runPreloader(() => {
+    ctx.add(() => setupWordmarkMotion(splits));
   });
 
   setupCursorPill(controller.signal);

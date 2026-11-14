@@ -1,0 +1,115 @@
+---
+---
+
+<div class="preloader" data-preloader aria-hidden="true">
+  <div class="container preloader__inner">
+    <div class="preloader__top">
+      <span class="preloader__brand">JOCELYNLAU.WORK</span>
+      <span class="preloader__year">PORTFOLIO <em>2026</em></span>
+    </div>
+
+    <div class="preloader__center">
+      <div class="preloader__meta">
+        <span class="preloader__label">LOADING</span>
+        <span class="preloader__percent tabular" data-preloader-percent>00%</span>
+      </div>
+      <div class="preloader__track">
+        <div class="preloader__bar" data-preloader-bar></div>
+      </div>
+    </div>
+
+    <div class="preloader__bottom">
+      <span>JAKARTA · BINUS</span>
+      <span>STRATEGY &amp; CONSULTING</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background-color: var(--color-black);
+    color: var(--ink-light);
+    display: flex;
+    align-items: stretch;
+  }
+
+  .preloader__inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-block: var(--space-md);
+    width: 100%;
+  }
+
+  .preloader__top,
+  .preloader__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .preloader__year em {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--color-red);
+    margin-left: 0.25rem;
+  }
+
+  .preloader__bottom {
+    color: var(--color-red);
+    border-top: 1px solid var(--border-hairline-dark);
+    padding-top: var(--space-xs);
+  }
+
+  .preloader__center {
+    width: min(100%, 22rem);
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .preloader__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .preloader__label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: var(--soil);
+  }
+
+  .preloader__percent {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+    line-height: 1;
+    color: var(--ink-light);
+  }
+
+  .preloader__track {
+    width: 100%;
+    height: 2px;
+    background-color: rgba(131, 0, 0, 0.35);
+    overflow: hidden;
+  }
+
+  .preloader__bar {
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-red);
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+</style>

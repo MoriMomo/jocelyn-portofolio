@@ -5,6 +5,7 @@ import '@fontsource-variable/inter-tight';
 import { ClientRouter } from 'astro:transitions';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import Preloader from '../components/Preloader.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -45,9 +46,16 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://jocelynl
     <meta name="twitter:description" content={description} />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <noscript><style>.preloader{display:none!important}</style></noscript>
     <ClientRouter />
   </head>
   <body>
+    <Preloader />
+    <script is:inline>
+      if (window.__preloaderDone || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.querySelector('[data-preloader]')?.remove();
+      }
+    </script>
     <a href="#main-content" class="sr-only">Skip to content</a>
     <Nav />
     <main id="main-content">
