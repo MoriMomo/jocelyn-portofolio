@@ -1,0 +1,162 @@
+import { test, expect } from '@playwright/test';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
+const CASE_SLUGS = [
+  'aquiplan',
+  'ace-benihbunbun',
+  'hexagon-paragon',
+  'little-visionaries',
+  'c2m-crystalin',
+  'smart-queue-kopi-kenangan',
+  'sahabatbulu',
+  'fellowship-community',
+  'business-club',
+  'arupadatu-website',
+];
+
+test.describe('Jocelyn Lau Portfolio Smoke & Review Suite', () => {
+  test('home renders hero, masthead, and 10 work rows without console errors', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+    page.on('pageerror', (err) => errors.push(err.message));
+
+    const res = await page.goto('/');
+    expect(res?.status()).toBe(200);
+
+    await expect(page.locator('h1')).toContainText('Building growth strategies');
+    const rows = page.locator('[data-work-row]');
+    await expect(rows).toHaveCount(10);
+
+    // Filter tabs work
+    await page.locator('[data-filter="Leadership & Community"]').click();
+    await expect(page.locator('[data-work-row]:not([hidden])')).toHaveCount(3);
+
+    await page.locator('[data-filter="Strategy & Consulting"]').click();
+    await expect(page.locator('[data-work-row]:not([hidden])')).toHaveCount(7);
+
+    await page.locator('[data-filter="all"]').click();
+    await expect(page.locator('[data-work-row]:not([hidden])')).toHaveCount(10);
+
+    expect(errors).toEqual([]);
+  });
+
+  test('every case study page returns 200, renders h1, and has no console errors', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+    page.on('pageerror', (err) => errors.push(err.message));
+
+    for (const slug of CASE_SLUGS) {
+      const res = await page.goto(`/work/${slug}`);
+      expect(res?.status(), `Status for /work/${slug}`).toBe(200);
+      await expect(page.locator('h1')).toBeVisible();
+    }
+
+    expect(errors).toEqual([]);
+  });
+
+  test('no horizontal overflow at 375, 768, 1024, and 1440px and mobile thumbnails/menu work', async ({ page }) => {
+    for (const width of [375, 768, 1024, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('/');
+      const homeOverflow = await page.evaluate(() => {
+        return document.documentElement.scrollWidth <= window.innerWidth;
+      });
+      expect(homeOverflow, `Home overflow at ${width}px`).toBe(true);
+
+      await page.goto('/work/little-visionaries');
+      const caseOverflow = await page.evaluate(() => {
+        return document.documentElement.scrollWidth <= window.innerWidth;
+      });
+      expect(caseOverflow, `Case study overflow at ${width}px`).toBe(true);
+    }
+
+    // Check mobile view specifically
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/');
+    const firstThumb = page.locator('.work-row__thumb').first();
+    await expect(firstThumb).toBeVisible();
+
+    // Mobile menu opens and closes with Escape
+    const toggle = page.locator('[data-menu-toggle]');
+    await toggle.click();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    await page.keyboard.press('Escape');
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('reduced motion: all [data-reveal] elements have computed opacity 1 immediately', async ({ browser }) => {
+    const context = await browser.newContext({ reducedMotion: 'reduce' });
+    const page = await context.newPage();
+
+    await page.goto('/');
+    const opacities = await page.locator('[data-reveal]').evaluateAll((els) =>
+      els.map((el) => window.getComputedStyle(el).opacity),
+    );
+    for (const op of opacities) {
+      expect(op).toBe('1');
+    }
+
+    await context.close();
+  });
+
+  test('JavaScript disabled: content remains fully visible and readable', async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+
+    await page.goto('/');
+    await expect(page.locator('h1')).toBeVisible();
+    const opacities = await page.locator('[data-reveal]').evaluateAll((els) =>
+      els.map((el) => window.getComputedStyle(el).opacity),
+    );
+    for (const op of opacities) {
+      expect(op).toBe('1');
+    }
+
+    await context.close();
+  });
+
+  test('navigation back/forward with View Transitions works cleanly', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (err) => errors.push(err.message));
+
+    await page.goto('/');
+    await page.locator('[data-work-row]').first().click();
+    await expect(page).toHaveURL(/\/work\/aquiplan/);
+    await expect(page.locator('h1')).toContainText('AquiPlan');
+
+    await page.goBack();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.locator('[data-work-row]')).toHaveCount(10);
+
+    expect(errors).toEqual([]);
+  });
+
+  test('built HTML contains no personal phone number or student IDs', async () => {
+    const distDir = path.resolve('dist');
+    const htmlFiles: string[] = [];
+
+    async function walk(dir: string) {
+      const entries = await fs.readdir(dir, { withFileTypes: true });
+      for (const entry of entries) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) await walk(full);
+        else if (entry.name.endsWith('.html')) htmlFiles.push(full);
+      }
+    }
+
+    await walk(distDir);
+    expect(htmlFiles.length).toBeGreaterThanOrEqual(11);
+
+    for (const file of htmlFiles) {
+      const content = await fs.readFile(file, 'utf8');
+      expect(content).not.toContain('81239913768');
+      expect(content).not.toContain('2902654751');
+      expect(content).not.toContain('2902669072');
+    }
+  });
+});
