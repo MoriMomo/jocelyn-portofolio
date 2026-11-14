@@ -156,10 +156,46 @@ const totalPad = String(sorted.length).padStart(2, '0');
 </section>
 
 <script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
   let workController: AbortController | null = null;
 
   function setCounterText(counter: HTMLElement | null, current: string, total: string): void {
     if (counter) counter.textContent = `${current}/${total}`;
+  }
+
+  function animateFilterChange(visibleRows: HTMLElement[], counter: HTMLElement | null): void {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      ScrollTrigger.refresh();
+      return;
+    }
+
+    gsap.killTweensOf(visibleRows);
+    if (visibleRows.length > 0) {
+      gsap.fromTo(
+        visibleRows,
+        { opacity: 0, y: 16 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.45,
+          stagger: 0.045,
+          ease: 'power3.out',
+          clearProps: 'transform,opacity',
+          onComplete: () => ScrollTrigger.refresh(),
+        },
+      );
+    }
+
+    if (counter) {
+      gsap.killTweensOf(counter);
+      gsap.fromTo(
+        counter,
+        { opacity: 0.35, y: 4 },
+        { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out', clearProps: 'transform,opacity' },
+      );
+    }
   }
 
   function applyCategoryFilter(
@@ -168,7 +204,7 @@ const totalPad = String(sorted.length).padStart(2, '0');
     rows: NodeListOf<HTMLElement>,
     counter: HTMLElement | null,
   ): void {
-    let visibleCount = 0;
+    const visibleRows: HTMLElement[] = [];
     buttons.forEach((btn) => {
       const active = btn.dataset.filter === category;
       btn.classList.toggle('is-active', active);
@@ -178,12 +214,13 @@ const totalPad = String(sorted.length).padStart(2, '0');
     rows.forEach((row) => {
       const match = category === 'all' || row.dataset.category === category;
       row.hidden = !match;
-      if (match) visibleCount += 1;
+      if (match) visibleRows.push(row);
     });
 
-    const total = String(visibleCount).padStart(2, '0');
+    const total = String(visibleRows.length).padStart(2, '0');
     if (counter) counter.dataset.total = total;
-    setCounterText(counter, visibleCount > 0 ? '01' : '00', total);
+    setCounterText(counter, visibleRows.length > 0 ? '01' : '00', total);
+    animateFilterChange(visibleRows, counter);
   }
 
   function activatePreviewCard(
