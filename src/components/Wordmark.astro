@@ -1,0 +1,66 @@
+---
+interface Props {
+  variant?: 'hero' | 'footer';
+}
+
+const { variant = 'hero' } = Astro.props;
+const text = 'JOCELYN LAU';
+const chars = text.split('');
+---
+
+<div
+  class:list={['wordmark', `wordmark--${variant}`]}
+  aria-label="Jocelyn Lau"
+  role="img"
+>
+  <span class="wordmark__track" aria-hidden="true">
+    {
+      chars.map((char) => (
+        <span
+          class:list={['wordmark__char', { 'wordmark__char--space': char === ' ' }]}
+          data-wordmark-char={variant === 'hero' ? '' : undefined}
+        >
+          {char === ' ' ? '\u00A0' : char}
+        </span>
+      ))
+    }
+  </span>
+</div>
+
+<style>
+  .wordmark {
+    width: 100%;
+    overflow: hidden;
+    user-select: none;
+    line-height: 0.88;
+    padding-block: 0.08em;
+  }
+
+  .wordmark__track {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    font-size: clamp(2.55rem, 11.2vw, 10.25rem);
+    white-space: nowrap;
+  }
+
+  .wordmark--hero {
+    color: var(--ink);
+  }
+
+  .wordmark--footer {
+    color: var(--cream);
+    opacity: 0.92;
+  }
+
+  .wordmark__char {
+    display: inline-block;
+  }
+
+  .wordmark__char--space {
+    width: 0.22em;
+  }
+</style>

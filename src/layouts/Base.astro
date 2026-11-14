@@ -3,6 +3,8 @@ import '@fontsource-variable/playfair-display';
 import '@fontsource-variable/playfair-display/wght-italic.css';
 import '@fontsource-variable/inter-tight';
 import { ClientRouter } from 'astro:transitions';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -14,7 +16,7 @@ interface Props {
 const {
   title,
   description,
-  image = '/og-default.jpg',
+  image = '/favicon.svg',
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://jocelynlau.work');
@@ -47,10 +49,27 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://jocelynl
   </head>
   <body>
     <a href="#main-content" class="sr-only">Skip to content</a>
-    <slot name="header" />
+    <Nav />
     <main id="main-content">
       <slot />
     </main>
-    <slot name="footer" />
+    <Footer />
+
+    <script>
+      import { initMotion } from '../scripts/motion';
+
+      let cleanup: (() => void) | null = null;
+
+      document.addEventListener('astro:page-load', () => {
+        cleanup = initMotion();
+      });
+
+      document.addEventListener('astro:before-swap', () => {
+        if (cleanup) {
+          cleanup();
+          cleanup = null;
+        }
+      });
+    </script>
   </body>
 </html>
