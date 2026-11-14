@@ -83,53 +83,46 @@ function setupHeroScroll(): void {
   }
 }
 
-function setupWordmarkMotion(splits: SplitText[]): void {
-  const chars = document.querySelectorAll<HTMLElement>('[data-wordmark-char]');
-  const strategy = document.querySelector<HTMLElement>('[data-hero-strategy]');
-  const meta = document.querySelectorAll<HTMLElement>('[data-hero-meta]');
+function revealHeroTargets(
+  selector: string,
+  from: gsap.TweenVars,
+  to: gsap.TweenVars,
+): void {
+  const targets = document.querySelectorAll<HTMLElement>(selector);
+  if (targets.length === 0) return;
 
-  if (chars.length > 0) {
-    gsap.from(chars, {
-      yPercent: 60,
-      opacity: 0,
-      duration: 0.85,
-      stagger: 0.025,
-      ease: 'power4.out',
-      clearProps: 'transform,opacity',
-    });
-  }
+  gsap.fromTo(
+    targets,
+    { ...from, opacity: 0 },
+    { ...to, opacity: 1, clearProps: 'transform,opacity' },
+  );
+}
 
-  if (strategy) {
-    const split = new SplitText(strategy, { type: 'chars' });
-    splits.push(split);
-    gsap.from(split.chars, {
-      yPercent: 55,
-      opacity: 0,
-      duration: 0.75,
-      delay: 0.14,
-      stagger: 0.025,
-      ease: 'power4.out',
-      clearProps: 'transform,opacity',
-    });
-  }
+function setupWordmarkMotion(): void {
+  const steps: Array<[string, gsap.TweenVars, gsap.TweenVars]> = [
+    [
+      '[data-wordmark-char]',
+      { yPercent: 45 },
+      { yPercent: 0, duration: 1.25, delay: 0.25, stagger: 0.045, ease: 'expo.out' },
+    ],
+    [
+      '.hero__strategy-word',
+      { y: 28 },
+      { y: 0, duration: 1.15, delay: 0.55, ease: 'power3.out' },
+    ],
+    [
+      '[data-hero-meta]',
+      { y: 22 },
+      { y: 0, duration: 1.1, delay: 0.78, stagger: 0.24, ease: 'power3.out' },
+    ],
+    [
+      '[data-hero-star]',
+      { scale: 0.65, rotation: -30 },
+      { scale: 1, rotation: 0, duration: 1.1, delay: 0.9, ease: 'power3.out' },
+    ],
+  ];
 
-  if (meta.length > 0) {
-    gsap.fromTo(
-      meta,
-      { y: 28, opacity: 0, scale: 0.96 },
-      {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 0.72,
-        delay: 0.24,
-        stagger: 0.12,
-        ease: 'back.out(1.4)',
-        clearProps: 'transform,opacity',
-      },
-    );
-  }
-
+  steps.forEach(([selector, from, to]) => revealHeroTargets(selector, from, to));
   setupHeroScroll();
 }
 
@@ -261,11 +254,11 @@ export function initMotion(): () => void {
   });
 
   if (document.querySelector('[data-preloader]')) {
-    gsap.set('[data-wordmark-char], [data-hero-meta]', { opacity: 0 });
+    gsap.set('[data-wordmark-char], .hero__strategy-word, [data-hero-meta], [data-hero-star]', { opacity: 0 });
   }
 
   runPreloader(() => {
-    ctx.add(() => setupWordmarkMotion(splits));
+    ctx.add(() => setupWordmarkMotion());
   });
 
   setupCursorPill(controller.signal);

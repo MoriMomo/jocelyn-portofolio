@@ -146,7 +146,7 @@ export function mountRotatingText(root: HTMLElement): () => void {
     gsap.fromTo(
       chars,
       { yPercent: cfg.up ? 105 : -105, opacity: 0 },
-      { yPercent: 0, opacity: 1, duration: 0.48, stagger: { each: cfg.stagger, from: cfg.from }, ease: 'power3.out', clearProps: 'transform,opacity', onComplete: schedule },
+      { yPercent: 0, opacity: 1, duration: 0.82, stagger: { each: cfg.stagger, from: cfg.from }, ease: 'power3.out', clearProps: 'transform,opacity', onComplete: schedule },
     );
   };
 
@@ -155,9 +155,9 @@ export function mountRotatingText(root: HTMLElement): () => void {
     gsap.to(currentChars, {
       yPercent: cfg.up ? -115 : 115,
       opacity: 0,
-      duration: 0.3,
+      duration: 0.52,
       stagger: { each: cfg.stagger, from: cfg.from },
-      ease: 'power2.in',
+      ease: 'power2.inOut',
       onComplete: renderNextWord,
     });
   };
