@@ -1,0 +1,148 @@
+---
+import type { Anchor, Finish, ImageFit, Metal, Orientation } from '../scripts/lanyard/types';
+
+interface Props {
+  frontImage?: string;
+  backImage?: string;
+  imageFit?: ImageFit;
+  cardColor?: string;
+  orientation?: Orientation;
+  finish?: Finish;
+  cornerRadius?: number;
+  size?: number;
+  anchor?: Anchor;
+  strapLength?: number;
+  strapImage?: string;
+  strapColor?: string;
+  strapWidth?: number;
+  metal?: Metal;
+  gravity?: number;
+  damping?: number;
+  elasticity?: number;
+  breeze?: number;
+  interactive?: boolean;
+  intro?: boolean;
+  alt?: string;
+  className?: string;
+}
+
+const {
+  frontImage,
+  backImage,
+  imageFit = 'cover',
+  cardColor = '#000000',
+  orientation = 'portrait',
+  finish = 'glossy',
+  cornerRadius = 0.25,
+  size = 0.6,
+  anchor = 'center',
+  strapLength = 0.45,
+  strapImage,
+  strapColor = '#830000',
+  strapWidth = 0.65,
+  metal = 'silver',
+  gravity = 1,
+  damping = 0.5,
+  elasticity = 0.5,
+  breeze = 0.5,
+  interactive = true,
+  intro = true,
+  alt = 'Interactive 3D lanyard badge',
+  className = '',
+} = Astro.props;
+
+const options = {
+  frontImage,
+  backImage,
+  imageFit,
+  cardColor,
+  orientation,
+  finish,
+  cornerRadius,
+  size,
+  anchor,
+  strapLength,
+  strapImage,
+  strapColor,
+  strapWidth,
+  metal,
+  gravity,
+  damping,
+  elasticity,
+  breeze,
+  interactive,
+  intro,
+};
+---
+
+<div
+  class:list={['lanyard', className]}
+  data-lanyard={JSON.stringify(options)}
+  aria-label={alt}
+>
+  {
+    frontImage && (
+      <img
+        src={frontImage}
+        alt={alt}
+        loading="eager"
+        decoding="sync"
+        class="lanyard-fallback"
+      />
+    )
+  }
+</div>
+
+<script>
+  import { mountLanyard } from '../scripts/lanyard/mount';
+  import type { LanyardOptions } from '../scripts/lanyard/types';
+
+  let cleanups: Array<() => void> = [];
+
+  function teardownLanyards(): void {
+    cleanups.forEach((fn) => fn());
+    cleanups = [];
+  }
+
+  function initLanyards(): void {
+    teardownLanyards();
+    document.querySelectorAll<HTMLElement>('[data-lanyard]').forEach((el) => {
+      const raw = el.dataset.lanyard;
+      if (!raw) return;
+      const opts = JSON.parse(raw) as LanyardOptions;
+      cleanups.push(mountLanyard(el, opts));
+    });
+  }
+
+  document.addEventListener('astro:page-load', initLanyards);
+  document.addEventListener('astro:before-swap', teardownLanyards);
+</script>
+
+<style>
+  .lanyard {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .lanyard :global(.lanyard-canvas) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .lanyard-fallback {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 14%;
+    border-radius: var(--radius-md);
+  }
+
+  .lanyard.is-ready .lanyard-fallback {
+    display: none;
+  }
+</style>

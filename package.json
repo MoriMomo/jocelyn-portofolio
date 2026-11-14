@@ -15,13 +15,15 @@
   "dependencies": {
     "@fontsource-variable/inter-tight": "^5.1.0",
     "@fontsource-variable/playfair-display": "^5.1.0",
-    "astro": "^5.1.0",
+    "astro": "^7.4.12",
     "gsap": "^3.13.0",
     "lenis": "^1.1.18",
-    "sharp": "^0.33.5"
+    "sharp": "^0.33.5",
+    "three": "^0.187.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.0",
+    "@types/three": "^0.187.0",
     "typescript": "^5.7.2"
   }
 }

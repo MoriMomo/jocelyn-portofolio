@@ -50,11 +50,13 @@ test.describe('Jocelyn Lau Portfolio Smoke & Review Suite', () => {
     await expect(page.locator('[data-work-row]:not([hidden])')).toHaveCount(10);
     await expect(page.locator('[data-work-counter]')).toHaveText('01/10');
 
-    // Hero and credentials portraits load eagerly and have non-zero naturalWidth
-    const heroPortraitLoaded = await page.locator('.hero__portrait-img').evaluate(
-      (img: HTMLImageElement) => img.complete && img.naturalWidth > 0,
-    );
-    expect(heroPortraitLoaded).toBe(true);
+    // Hero 3D lanyard canvas mounts with non-zero dimensions and credentials portrait loads eagerly
+    const lanyardCanvas = page.locator('[data-lanyard] .lanyard-canvas');
+    await expect(lanyardCanvas).toBeVisible();
+    const lanyardBox = await lanyardCanvas.boundingBox();
+    expect(lanyardBox).not.toBeNull();
+    expect(lanyardBox!.width).toBeGreaterThan(100);
+    expect(lanyardBox!.height).toBeGreaterThan(100);
 
     const portraitLoaded = await page.locator('.about-profile__portrait').evaluate(
       (img: HTMLImageElement) => img.complete && img.naturalWidth > 0,
@@ -156,6 +158,7 @@ test.describe('Jocelyn Lau Portfolio Smoke & Review Suite', () => {
 
     await page.goto('/');
     await expect(page.locator('h1')).toBeVisible();
+    await expect(page.locator('.lanyard-fallback')).toBeVisible();
     const opacities = await page.locator('[data-reveal], [data-scrub-chars]').evaluateAll((els) =>
       els.map((el) => window.getComputedStyle(el).opacity),
     );

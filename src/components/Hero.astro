@@ -1,25 +1,30 @@
 ---
-import { Image } from 'astro:assets';
+import { getImage } from 'astro:assets';
 import portraitImg from '../assets/portrait.jpg';
+import Lanyard from './Lanyard.astro';
 import Wordmark from './Wordmark.astro';
+
+const portraitAsset = await getImage({ src: portraitImg, width: 800, format: 'webp' });
 ---
 
 <section id="top" class="hero surface-dark" aria-labelledby="hero-heading">
   <div class="container hero__stage">
-    <!-- Centered Portrait Card backed by Sceptre Red Studio Panel -->
+    <!-- Interactive 3D Lanyard Portrait Badge -->
     <div class="hero__portrait-wrap" data-reveal="up">
-      <div class="hero__portrait-card">
-        <Image
-          src={portraitImg}
-          alt="Jocelyn Lau, Business Strategist and International Business Management Scholar"
-          width={560}
-          height={760}
-          loading="eager"
-          decoding="sync"
-          class="hero__portrait-img"
-        />
-        <div class="hero__portrait-vignette" aria-hidden="true"></div>
-      </div>
+      <Lanyard
+        frontImage={portraitAsset.src}
+        alt="Jocelyn Lau, Business Strategist and International Business Management Scholar"
+        cardColor="#000000"
+        strapColor="#830000"
+        metal="silver"
+        finish="glossy"
+        cornerRadius={0.22}
+        size={0.58}
+        strapLength={0.42}
+        strapWidth={0.65}
+        interactive={true}
+        intro={true}
+      />
     </div>
 
     <!-- Mid-Hero Horizontal Rule Row: HI THERE · Starburst · Hook Statement -->
@@ -80,57 +85,25 @@ import Wordmark from './Wordmark.astro';
 
   .hero__portrait-wrap {
     position: absolute;
-    left: clamp(14%, 22vw, 28%);
-    top: 0;
-    width: clamp(15rem, 29vw, 24.5rem);
-    height: clamp(23rem, 62vh, 38rem);
-    z-index: 1;
-    pointer-events: none;
-  }
-
-  .hero__portrait-card {
-    position: relative;
-    width: 100%;
-    height: 100%;
+    left: clamp(10%, 19vw, 25%);
+    top: -0.5rem;
+    width: clamp(18rem, 34vw, 28rem);
+    height: clamp(26rem, 68vh, 42rem);
+    z-index: 2;
+    pointer-events: auto;
     border-radius: var(--radius-md);
-    overflow: hidden;
     background: radial-gradient(
-      circle at 55% 28%,
-      var(--color-crimson) 0%,
-      var(--color-black) 100%
+      ellipse 56% 52% at 50% 56%,
+      rgba(131, 0, 0, 0.32) 0%,
+      rgba(131, 0, 0, 0.08) 54%,
+      transparent 78%
     );
-    border: 1px solid rgba(188, 2, 2, 0.4);
-  }
-
-  .hero__portrait-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 14%;
-    filter: contrast(1.06) saturate(0.92);
-  }
-
-  .hero__portrait-vignette {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(
-        ellipse 58% 66% at 50% 42%,
-        rgba(131, 0, 0, 0.06) 26%,
-        rgba(131, 0, 0, 0.72) 68%,
-        rgba(0, 0, 0, 0.96) 98%
-      ),
-      linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.35) 0%,
-        rgba(131, 0, 0, 0.08) 32%,
-        rgba(0, 0, 0, 0.92) 100%
-      );
   }
 
   .hero__mid-band {
     position: relative;
-    z-index: 2;
+    z-index: 3;
+    pointer-events: none;
     margin-top: clamp(7.5rem, 18vh, 12.5rem);
     padding-block: var(--space-sm);
     border-top: 1px solid var(--border-hairline-dark);
@@ -197,6 +170,7 @@ import Wordmark from './Wordmark.astro';
     color: var(--blue);
     border-bottom: 1px solid rgba(255, 0, 0, 0.55);
     padding-bottom: 0.15rem;
+    pointer-events: auto;
   }
 
   .hero__cta:hover {
@@ -207,6 +181,7 @@ import Wordmark from './Wordmark.astro';
   .hero__display {
     position: relative;
     z-index: 3;
+    pointer-events: none;
     margin-top: clamp(2rem, 5vh, 4rem);
     display: flex;
     flex-direction: column;
@@ -259,9 +234,9 @@ import Wordmark from './Wordmark.astro';
       position: relative;
       left: auto;
       top: auto;
-      width: min(100%, 13.5rem);
+      width: min(100%, 18rem);
       height: auto;
-      aspect-ratio: 1 / 1.05;
+      aspect-ratio: 1 / 1.15;
       margin-inline: auto;
     }
 
