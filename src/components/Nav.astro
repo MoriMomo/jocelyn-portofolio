@@ -81,9 +81,11 @@ const isHome = Astro.url.pathname === '/';
         {
           navLinks.map((item, idx) => (
             <li>
-              <a href={item.href} class="mobile-menu__link roll-link" data-mobile-link>
+              <a href={item.href} class="mobile-menu__link" data-mobile-link>
                 <span class="tabular mobile-menu__idx">0{idx + 1}</span>
-                <span class="roll-text" data-text={item.label}>{item.label}</span>
+                <span class="roll-link">
+                  <span class="roll-text" data-text={item.label}>{item.label}</span>
+                </span>
               </a>
             </li>
           ))
