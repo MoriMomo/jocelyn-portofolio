@@ -1,0 +1,124 @@
+---
+import type { RotatingTextOptions } from '../scripts/rotatingText';
+
+interface Props extends RotatingTextOptions {
+  className?: string;
+}
+
+const {
+  texts = [],
+  direction = 'up',
+  rotationInterval = 2200,
+  staggerDuration = 0.025,
+  staggerFrom = 'last',
+  pauseOnHover = false,
+  highlight = false,
+  highlightColor = '#830000',
+  splitLevelClassName = '',
+  elementLevelClassName = '',
+  className = '',
+} = Astro.props;
+
+const initialText = texts[0] ?? '';
+const words = initialText.split(' ');
+const payload = JSON.stringify({
+  texts,
+  direction,
+  rotationInterval,
+  staggerDuration,
+  staggerFrom,
+  pauseOnHover,
+  highlight,
+  highlightColor,
+  splitLevelClassName,
+  elementLevelClassName,
+});
+---
+
+<span
+  class:list={['text-rotate', highlight && 'text-rotate-highlight', className]}
+  style={highlight ? `background-color: ${highlightColor};` : undefined}
+  data-rotating-text={payload}
+>
+  <span class="text-rotate-sr-only">{initialText}</span>
+  <span class="text-rotate-stage" data-rotate-stage aria-hidden="true">
+    {
+      words.map((word, wi) => (
+        <span class:list={['text-rotate-word', splitLevelClassName]}>
+          {Array.from(word).map((ch) => (
+            <span class:list={['text-rotate-element', elementLevelClassName]}>{ch}</span>
+          ))}
+          {wi < words.length - 1 && <span class="text-rotate-space"> </span>}
+        </span>
+      ))
+    }
+  </span>
+</span>
+
+<script>
+  import { mountRotatingText } from '../scripts/rotatingText';
+
+  let cleanups: Array<() => void> = [];
+
+  function initAllRotatingTexts(): void {
+    cleanups.forEach((fn) => fn());
+    cleanups = [];
+    document.querySelectorAll<HTMLElement>('[data-rotating-text]').forEach((el) => {
+      cleanups.push(mountRotatingText(el));
+    });
+  }
+
+  document.addEventListener('astro:page-load', initAllRotatingTexts);
+  document.addEventListener('astro:before-swap', () => {
+    cleanups.forEach((fn) => fn());
+    cleanups = [];
+  });
+</script>
+
+<style is:global>
+  .text-rotate {
+    display: inline-flex;
+    flex-wrap: wrap;
+    white-space: pre-wrap;
+    position: relative;
+  }
+
+  .text-rotate-stage {
+    display: inline-flex;
+    flex-wrap: wrap;
+  }
+
+  .text-rotate-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .text-rotate-word {
+    display: inline-flex;
+    overflow: hidden;
+  }
+
+  .text-rotate-element {
+    display: inline-block;
+  }
+
+  .text-rotate-space {
+    white-space: pre;
+  }
+
+  .text-rotate-highlight {
+    box-sizing: content-box;
+    flex-wrap: nowrap;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0.1em 0.28em;
+    border-radius: 0.16em;
+  }
+</style>

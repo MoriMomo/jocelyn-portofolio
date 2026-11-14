@@ -2,6 +2,7 @@
 import { getImage } from 'astro:assets';
 import lanyardPortraitImg from '../assets/lanyard-portrait.jpg';
 import Lanyard from './Lanyard.astro';
+import RotatingText from './RotatingText.astro';
 import Wordmark from './Wordmark.astro';
 
 const portraitAsset = await getImage({ src: lanyardPortraitImg, width: 800, format: 'webp' });
@@ -59,7 +60,16 @@ const portraitAsset = await getImage({ src: lanyardPortraitImg, width: 800, form
       <Wordmark variant="hero" />
       <span class="hero__strategy-row" aria-hidden="true">
         <span class="hero__strategy-meta" data-hero-meta>IBM · BINUS UNIVERSITY</span>
-        <span class="hero__strategy-word" data-hero-strategy>.<span class="hero__strategy-italic">STR</span>ATEGY</span>
+        <span class="hero__strategy-word">
+          <span class="hero__strategy-italic">.</span><RotatingText
+            texts={['STRATEGY', 'ANALYSIS', 'MARKETS', 'GROWTH', 'BRANDS']}
+            direction="up"
+            staggerFrom="last"
+            staggerDuration={0.025}
+            rotationInterval={2400}
+            splitLevelClassName="hero__rotate-word"
+          />
+        </span>
       </span>
     </h1>
   </div>
@@ -204,13 +214,19 @@ const portraitAsset = await getImage({ src: lanyardPortraitImg, width: 800, form
   }
 
   .hero__strategy-word {
+    display: inline-flex;
+    align-items: baseline;
     font-family: var(--font-sans);
     font-weight: 500;
     font-size: clamp(2.1rem, 8.8vw, 7.5rem);
-    line-height: 0.88;
+    line-height: 0.96;
     letter-spacing: -0.04em;
     color: var(--blue);
     margin-left: auto;
+  }
+
+  :global(.hero__rotate-word) {
+    padding-bottom: 0.05em;
   }
 
   .hero__strategy-italic {
