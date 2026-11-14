@@ -104,11 +104,12 @@ textarea {
   font-weight: 500;
   line-height: 1.08;
   letter-spacing: -0.02em;
+  font-variant-numeric: lining-nums;
   color: var(--ink);
 }
 
 .tabular {
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .hairline-top {

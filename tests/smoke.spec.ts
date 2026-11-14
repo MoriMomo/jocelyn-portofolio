@@ -40,6 +40,19 @@ test.describe('Jocelyn Lau Portfolio Smoke & Review Suite', () => {
     await page.locator('[data-filter="all"]').click();
     await expect(page.locator('[data-work-row]:not([hidden])')).toHaveCount(10);
 
+    // Portrait image in credentials section loads eagerly and has non-zero naturalWidth
+    const portraitLoaded = await page.locator('.about-profile__portrait').evaluate(
+      (img: HTMLImageElement) => img.complete && img.naturalWidth > 0,
+    );
+    expect(portraitLoaded).toBe(true);
+
+    // Highlight card metrics all stay on a single line at 1440px
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const metricHeights = await page.locator('.highlight-card__metric').evaluateAll((els) =>
+      els.map((el) => el.getBoundingClientRect().height),
+    );
+    expect(new Set(metricHeights.map((h) => Math.round(h))).size).toBe(1);
+
     expect(errors).toEqual([]);
   });
 
