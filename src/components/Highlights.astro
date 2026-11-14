@@ -31,7 +31,7 @@ const highlights = [
 ];
 ---
 
-<section class="highlights" aria-labelledby="highlights-heading">
+<section id="highlights" class="highlights surface-light" aria-labelledby="highlights-heading">
   <div class="container">
     <div class="highlights__header" data-reveal="up">
       <p class="eyebrow">Quantifiable Impact</p>
@@ -85,14 +85,15 @@ const highlights = [
   .highlight-card {
     padding: var(--space-md);
     border-radius: var(--radius-md);
-    border: 1px solid var(--border-hairline);
+    border: 1px solid var(--border-strong);
     display: flex;
     flex-direction: column;
     gap: var(--space-xs);
   }
 
   .highlight-card--cream {
-    background-color: var(--cream);
+    background-color: var(--surface-elevated);
+    border-top: 3px solid var(--red);
     color: var(--ink);
   }
 

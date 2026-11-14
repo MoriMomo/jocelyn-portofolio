@@ -1,18 +1,34 @@
 :root {
-  /* Client Pantone Palette + Warm Ivory Executive Surface */
-  --surface: #FCFBF4;
-  --cream: #F5EFC6;
-  --ink: #231815;
-  --red: #4D0E12;
-  --soil: #4A2E27;
-  --blue: #A5BCD6;
+  /* Strict 5-Color Client Pantone Palette */
+  --color-transparent-yellow: #F5EFC6;
+  --color-sceptre-red: #4D0E12;
+  --color-cerulean-blue: #A5BCD6;
+  --color-potting-soil: #4A2E27;
+  --color-java-brown: #231815;
 
-  /* Derived UI Tokens (strictly from the 5 Pantone hexes) */
-  --border-hairline: rgba(74, 46, 39, 0.16);
-  --border-strong: rgba(35, 24, 21, 0.32);
-  --surface-elevated: rgba(245, 239, 198, 0.45);
-  --blue-tint: rgba(165, 188, 214, 0.28);
-  --red-tint: rgba(77, 14, 18, 0.08);
+  /* Semantic Surface & Ink Aliases (100% from the 5 Pantone values) */
+  --bg-dark: var(--color-java-brown);
+  --bg-light: var(--color-transparent-yellow);
+  --bg-soil: var(--color-potting-soil);
+  --ink-dark: var(--color-java-brown);
+  --ink-light: var(--color-transparent-yellow);
+
+  /* Backward-compatible Palette Aliases */
+  --surface: var(--color-transparent-yellow);
+  --cream: var(--color-transparent-yellow);
+  --ink: var(--color-java-brown);
+  --red: var(--color-sceptre-red);
+  --soil: var(--color-potting-soil);
+  --blue: var(--color-cerulean-blue);
+
+  /* Derived Hairlines & Tints (strictly from the 5 Pantone hexes) */
+  --border-hairline: rgba(74, 46, 39, 0.24);
+  --border-hairline-dark: rgba(245, 239, 198, 0.16);
+  --border-strong: rgba(35, 24, 21, 0.42);
+  --border-strong-dark: rgba(245, 239, 198, 0.34);
+  --surface-elevated: rgba(74, 46, 39, 0.08);
+  --blue-tint: rgba(165, 188, 214, 0.35);
+  --red-tint: rgba(77, 14, 18, 0.12);
 
   /* Typography */
   --font-display: 'Playfair Display Variable', 'Playfair Display', Georgia, serif;

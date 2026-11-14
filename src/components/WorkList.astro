@@ -10,16 +10,22 @@ const { entries } = Astro.props;
 const sorted = [...entries].sort((a, b) => a.data.order - b.data.order);
 const strategyCount = sorted.filter((e) => e.data.category === 'Strategy & Consulting').length;
 const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & Community').length;
+const totalPad = String(sorted.length).padStart(2, '0');
 ---
 
-<section id="work" class="work-section hairline-top" aria-labelledby="work-heading">
+<section id="work" class="work-section surface-light hairline-top" aria-labelledby="work-heading">
   <span id="leadership" class="sr-only" aria-hidden="true"></span>
   <div class="container">
     <div class="work-section__header" data-reveal="up">
       <div>
-        <p class="eyebrow">Portfolio Index · 01 — {String(sorted.length).padStart(2, '0')}</p>
+        <div class="work-section__eyebrow-row">
+          <p class="eyebrow">Selected Work</p>
+          <span class="tabular work-section__counter" data-work-counter data-total={totalPad}>
+            01/{totalPad}
+          </span>
+        </div>
         <h2 id="work-heading" class="serif-heading work-section__title">
-          Selected Case Studies & Leadership
+          Case Studies & Leadership
         </h2>
       </div>
 
@@ -73,6 +79,8 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
               data-work-row
               data-category={entry.data.category}
               data-preview-index={idx}
+              data-row-num={num}
+              data-cursor-target
               data-reveal="up"
             >
               <span class="tabular work-row__index">{num}</span>
@@ -84,6 +92,7 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
                     alt={entry.data.coverAlt}
                     width={560}
                     height={340}
+                    loading={idx < 3 ? 'eager' : 'lazy'}
                     class="work-row__thumb-img"
                   />
                 </div>
@@ -109,8 +118,8 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
                 </span>
               </div>
 
-              <span class="work-row__arrow" aria-hidden="true">
-                Case Study ↗
+              <span class="work-row__arrow roll-link" aria-hidden="true">
+                <span class="roll-text" data-text="Case Study ↗">Case Study ↗</span>
               </span>
             </a>
           );
@@ -118,7 +127,7 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
       }
     </div>
 
-    <!-- Desktop cursor-following floating preview -->
+    <!-- Desktop cursor-following floating preview card -->
     <div class="work-preview" aria-hidden="true" data-work-preview>
       {
         sorted.map((entry, idx) => (
@@ -131,12 +140,17 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
               class="work-preview__img"
             />
             <div class="work-preview__caption">
-              <span class="tabular">0{idx + 1}</span>
+              <span class="tabular">{String(idx + 1).padStart(2, '0')}/{totalPad}</span>
               <span>{entry.data.tag}</span>
             </div>
           </div>
         ))
       }
+    </div>
+
+    <!-- Magnetic GSAP cursor pill -->
+    <div class="cursor-pill" data-cursor-pill aria-hidden="true">
+      View work ↗
     </div>
   </div>
 </section>
@@ -144,86 +158,127 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
 <script>
   let workController: AbortController | null = null;
 
-  function setupWorkList() {
+  function setCounterText(counter: HTMLElement | null, current: string, total: string): void {
+    if (counter) counter.textContent = `${current}/${total}`;
+  }
+
+  function applyCategoryFilter(
+    category: string,
+    buttons: NodeListOf<HTMLButtonElement>,
+    rows: NodeListOf<HTMLElement>,
+    counter: HTMLElement | null,
+  ): void {
+    let visibleCount = 0;
+    buttons.forEach((btn) => {
+      const active = btn.dataset.filter === category;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-selected', String(active));
+    });
+
+    rows.forEach((row) => {
+      const match = category === 'all' || row.dataset.category === category;
+      row.hidden = !match;
+      if (match) visibleCount += 1;
+    });
+
+    const total = String(visibleCount).padStart(2, '0');
+    if (counter) counter.dataset.total = total;
+    setCounterText(counter, visibleCount > 0 ? '01' : '00', total);
+  }
+
+  function activatePreviewCard(
+    container: HTMLElement,
+    cards: NodeListOf<HTMLElement>,
+    index: string | undefined,
+  ): void {
+    container.classList.add('is-visible');
+    cards.forEach((card) => card.classList.toggle('is-active', card.dataset.previewCard === index));
+  }
+
+  function positionPreviewCard(container: HTMLElement, e: MouseEvent): void {
+    const x = Math.min(window.innerWidth - 350, e.clientX + 44);
+    const y = Math.min(window.innerHeight - 250, Math.max(80, e.clientY - 115));
+    container.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  }
+
+  function getCounterTotal(counter: HTMLElement | null): string {
+    if (!counter) return '10';
+    return counter.dataset.total || '10';
+  }
+
+  function handleRowEnter(
+    row: HTMLElement,
+    counter: HTMLElement | null,
+    previewContainer: HTMLElement | null,
+    previewCards: NodeListOf<HTMLElement>,
+    allowPreview: boolean,
+  ): void {
+    setCounterText(counter, row.dataset.rowNum || '01', getCounterTotal(counter));
+    if (!allowPreview || !previewContainer) return;
+    activatePreviewCard(previewContainer, previewCards, row.dataset.previewIndex);
+  }
+
+  function bindRowHover(
+    rows: NodeListOf<HTMLElement>,
+    counter: HTMLElement | null,
+    previewContainer: HTMLElement | null,
+    previewCards: NodeListOf<HTMLElement>,
+    signal: AbortSignal,
+  ): void {
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const allowPreview = Boolean(canHover && !reduced && previewContainer);
+
+    rows.forEach((row) => {
+      row.addEventListener(
+        'mouseenter',
+        () => handleRowEnter(row, counter, previewContainer, previewCards, allowPreview),
+        { signal },
+      );
+
+      if (!allowPreview || !previewContainer) return;
+
+      row.addEventListener(
+        'mouseleave',
+        () => previewContainer.classList.remove('is-visible'),
+        { signal },
+      );
+      row.addEventListener(
+        'mousemove',
+        (e: MouseEvent) => positionPreviewCard(previewContainer, e),
+        { signal },
+      );
+    });
+  }
+
+  function setupWorkList(): void {
     workController?.abort();
     workController = new AbortController();
     const { signal } = workController;
 
     const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
     const rows = document.querySelectorAll<HTMLElement>('[data-work-row]');
+    const counter = document.querySelector<HTMLElement>('[data-work-counter]');
     const previewContainer = document.querySelector<HTMLElement>('[data-work-preview]');
     const previewCards = document.querySelectorAll<HTMLElement>('[data-preview-card]');
-
-    const applyFilter = (category: string) => {
-      buttons.forEach((btn) => {
-        const active = btn.dataset.filter === category;
-        btn.classList.toggle('is-active', active);
-        btn.setAttribute('aria-selected', String(active));
-      });
-
-      rows.forEach((row) => {
-        const match = category === 'all' || row.dataset.category === category;
-        row.hidden = !match;
-      });
-    };
 
     buttons.forEach((btn) => {
       btn.addEventListener(
         'click',
-        () => {
-          applyFilter(btn.dataset.filter || 'all');
-        },
+        () => applyCategoryFilter(btn.dataset.filter || 'all', buttons, rows, counter),
         { signal },
       );
     });
 
-    // If navigated via #leadership anchor, filter to Leadership & Community
     const checkHash = () => {
-      if (window.location.hash === '#leadership') {
-        applyFilter('Leadership & Community');
-        document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' });
-      }
+      if (window.location.hash !== '#leadership') return;
+      applyCategoryFilter('Leadership & Community', buttons, rows, counter);
+      document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' });
     };
     window.addEventListener('hashchange', checkHash, { signal });
     checkHash();
 
-    // Floating hover preview for fine pointer devices when reduced-motion is off
-    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (!canHover || reducedMotion || !previewContainer) return;
-
-    rows.forEach((row) => {
-      row.addEventListener(
-        'mouseenter',
-        () => {
-          const idx = row.dataset.previewIndex;
-          previewContainer.classList.add('is-visible');
-          previewCards.forEach((card) => {
-            card.classList.toggle('is-active', card.dataset.previewCard === idx);
-          });
-        },
-        { signal },
-      );
-
-      row.addEventListener(
-        'mouseleave',
-        () => {
-          previewContainer.classList.remove('is-visible');
-        },
-        { signal },
-      );
-
-      row.addEventListener(
-        'mousemove',
-        (e: MouseEvent) => {
-          const x = Math.min(window.innerWidth - 360, e.clientX + 28);
-          const y = Math.min(window.innerHeight - 250, Math.max(80, e.clientY - 110));
-          previewContainer.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-        },
-        { signal },
-      );
-    });
+    bindRowHover(rows, counter, previewContainer, previewCards, signal);
   }
 
   document.addEventListener('astro:page-load', setupWorkList);
@@ -245,9 +300,25 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
     margin-bottom: var(--space-lg);
   }
 
+  .work-section__eyebrow-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .work-section__counter {
+    padding: 0.16rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--ink);
+    color: var(--cream);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+
   .work-section__title {
     font-size: var(--step-3);
-    margin-top: 0.3rem;
+    margin-top: 0.35rem;
   }
 
   .work-filter {
@@ -263,7 +334,7 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
     letter-spacing: 0.04em;
     background-color: transparent;
     color: var(--soil);
-    border: 1px solid var(--border-hairline);
+    border: 1px solid var(--border-strong);
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: all var(--duration-fast) ease;
@@ -282,7 +353,7 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
 
   .work-table__head {
     display: grid;
-    grid-template-columns: 3.2rem 1.8fr 1.1fr 0.95fr 6.5rem;
+    grid-template-columns: 3.2rem 1.8fr 1.1fr 0.95fr 7rem;
     gap: var(--space-md);
     padding-block: 0.75rem;
     font-size: 0.74rem;
@@ -294,7 +365,7 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
 
   .work-row {
     display: grid;
-    grid-template-columns: 3.2rem 1.8fr 1.1fr 0.95fr 6.5rem;
+    grid-template-columns: 3.2rem 1.8fr 1.1fr 0.95fr 7rem;
     gap: var(--space-md);
     align-items: center;
     padding-block: var(--space-md);
@@ -328,9 +399,9 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
     display: none;
     overflow: hidden;
     border-radius: var(--radius-sm);
-    border: 1px solid var(--border-hairline);
+    border: 1px solid var(--border-strong);
     aspect-ratio: 16 / 10;
-    background-color: var(--cream);
+    background-color: var(--bg-dark);
   }
 
   .work-row__thumb-img {
@@ -385,21 +456,46 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
   }
 
   .work-row__arrow {
+    justify-self: end;
     font-size: var(--step--1);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--red);
-    text-align: right;
     white-space: nowrap;
   }
 
-  /* Floating cursor preview on desktop */
+  /* Magnetic GSAP cursor pill */
+  .cursor-pill {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 0.55rem 1rem;
+    background-color: var(--red);
+    color: var(--cream);
+    border: 1px solid rgba(245, 239, 198, 0.35);
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.28s var(--ease-out-expo);
+    z-index: 50;
+  }
+
+  .cursor-pill.is-active {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* Floating cursor preview card on desktop */
   .work-preview {
     position: fixed;
     top: 0;
     left: 0;
-    width: 320px;
+    width: 310px;
     pointer-events: none;
     z-index: 40;
     opacity: 0;
@@ -412,11 +508,12 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
 
   .work-preview__item {
     display: none;
-    background-color: var(--surface);
-    border: 1px solid var(--border-strong);
+    background-color: var(--bg-dark);
+    color: var(--ink-light);
+    border: 1px solid var(--border-strong-dark);
     border-radius: var(--radius-md);
-    padding: 0.5rem;
-    box-shadow: 0 20px 45px rgba(35, 24, 21, 0.18);
+    padding: 0.45rem;
+    box-shadow: 0 22px 48px rgba(35, 24, 21, 0.28);
   }
 
   .work-preview__item.is-active {
@@ -425,23 +522,24 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
 
   .work-preview__img {
     width: 100%;
-    height: 190px;
+    height: 185px;
     object-fit: cover;
     border-radius: var(--radius-sm);
-    background-color: var(--cream);
+    background-color: var(--soil);
   }
 
   .work-preview__caption {
     display: flex;
     justify-content: space-between;
     padding-top: 0.45rem;
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     font-weight: 600;
-    color: var(--soil);
+    color: var(--blue);
   }
 
   @media (hover: none), (pointer: coarse), (max-width: 980px) {
-    .work-preview {
+    .work-preview,
+    .cursor-pill {
       display: none !important;
     }
 
@@ -461,7 +559,7 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
     }
 
     .work-row__arrow {
-      text-align: left;
+      justify-self: start;
       padding-top: 0.25rem;
     }
   }

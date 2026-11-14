@@ -26,21 +26,36 @@ test.describe('Jocelyn Lau Portfolio Smoke & Review Suite', () => {
     const res = await page.goto('/');
     expect(res?.status()).toBe(200);
 
-    await expect(page.locator('h1')).toContainText('Building growth strategies');
+    await expect(page.locator('h1')).toContainText('Jocelyn Lau');
+    await expect(page.locator('.hero__hook')).toContainText('Building growth strategies');
+    await expect(page.locator('[data-jkt-clock]')).toHaveText(/^JKT \d{2}:\d{2}$/);
+    await expect(page.locator('[data-scrub-chars]')).toContainText('Strategy should do more');
+    await expect(page.locator('.roll-link .roll-text[data-text]').first()).toBeVisible();
+    await expect(page.locator('.site-marquee')).toBeVisible();
+
     const rows = page.locator('[data-work-row]');
     await expect(rows).toHaveCount(10);
+    await expect(page.locator('[data-work-counter]')).toHaveText('01/10');
 
-    // Filter tabs work
+    // Filter tabs work and update 01/XX index counter
     await page.locator('[data-filter="Leadership & Community"]').click();
     await expect(page.locator('[data-work-row]:not([hidden])')).toHaveCount(3);
+    await expect(page.locator('[data-work-counter]')).toHaveText('01/03');
 
     await page.locator('[data-filter="Strategy & Consulting"]').click();
     await expect(page.locator('[data-work-row]:not([hidden])')).toHaveCount(7);
+    await expect(page.locator('[data-work-counter]')).toHaveText('01/07');
 
     await page.locator('[data-filter="all"]').click();
     await expect(page.locator('[data-work-row]:not([hidden])')).toHaveCount(10);
+    await expect(page.locator('[data-work-counter]')).toHaveText('01/10');
 
-    // Portrait image in credentials section loads eagerly and has non-zero naturalWidth
+    // Hero and credentials portraits load eagerly and have non-zero naturalWidth
+    const heroPortraitLoaded = await page.locator('.hero__portrait-img').evaluate(
+      (img: HTMLImageElement) => img.complete && img.naturalWidth > 0,
+    );
+    expect(heroPortraitLoaded).toBe(true);
+
     const portraitLoaded = await page.locator('.about-profile__portrait').evaluate(
       (img: HTMLImageElement) => img.complete && img.naturalWidth > 0,
     );
@@ -125,7 +140,7 @@ test.describe('Jocelyn Lau Portfolio Smoke & Review Suite', () => {
     const page = await context.newPage();
 
     await page.goto('/');
-    const opacities = await page.locator('[data-reveal]').evaluateAll((els) =>
+    const opacities = await page.locator('[data-reveal], [data-scrub-chars]').evaluateAll((els) =>
       els.map((el) => window.getComputedStyle(el).opacity),
     );
     for (const op of opacities) {
@@ -141,7 +156,7 @@ test.describe('Jocelyn Lau Portfolio Smoke & Review Suite', () => {
 
     await page.goto('/');
     await expect(page.locator('h1')).toBeVisible();
-    const opacities = await page.locator('[data-reveal]').evaluateAll((els) =>
+    const opacities = await page.locator('[data-reveal], [data-scrub-chars]').evaluateAll((els) =>
       els.map((el) => window.getComputedStyle(el).opacity),
     );
     for (const op of opacities) {
@@ -167,9 +182,10 @@ test.describe('Jocelyn Lau Portfolio Smoke & Review Suite', () => {
     expect(errors).toEqual([]);
   });
 
-  test('built HTML contains no personal phone number or student IDs', async () => {
+  test('built assets contain only the 5 Pantone palette hexes and no personal phone/student IDs', async () => {
     const distDir = path.resolve('dist');
     const htmlFiles: string[] = [];
+    const cssFiles: string[] = [];
 
     async function walk(dir: string) {
       const entries = await fs.readdir(dir, { withFileTypes: true });
@@ -177,6 +193,7 @@ test.describe('Jocelyn Lau Portfolio Smoke & Review Suite', () => {
         const full = path.join(dir, entry.name);
         if (entry.isDirectory()) await walk(full);
         else if (entry.name.endsWith('.html')) htmlFiles.push(full);
+        else if (entry.name.endsWith('.css')) cssFiles.push(full);
       }
     }
 
@@ -188,6 +205,13 @@ test.describe('Jocelyn Lau Portfolio Smoke & Review Suite', () => {
       expect(content).not.toContain('81239913768');
       expect(content).not.toContain('2902654751');
       expect(content).not.toContain('2902669072');
+      expect(content.toLowerCase()).not.toContain('fcfbf4');
+    }
+
+    for (const file of cssFiles) {
+      const content = await fs.readFile(file, 'utf8');
+      expect(content.toLowerCase()).not.toContain('fcfbf4');
+      expect(content).not.toContain('252, 251, 244');
     }
   });
 });

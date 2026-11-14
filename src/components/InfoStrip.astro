@@ -1,36 +1,53 @@
 ---
+const initialClock = `JKT ${new Intl.DateTimeFormat('en-GB', {
+  timeZone: 'Asia/Jakarta',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+}).format(new Date())}`;
+
 const items = [
   {
     label: 'Primary Focus',
     value: 'Business Strategy, B2B Consulting & Gen Z Marketing',
+    isClock: false,
   },
   {
     label: 'Education',
-    value: 'International Business Management, BINUS University',
+    value: 'International Business Management · BINUS University',
+    isClock: false,
   },
   {
-    label: 'Case Honors',
-    value: '2nd National (Singapore Finals) · 3rd DWDG · 5th BICON',
-  },
-  {
-    label: 'Leadership Scope',
-    value: '120+ Students Led Across 3 Organizations',
+    label: 'Local Time',
+    value: initialClock,
+    isClock: true,
   },
   {
     label: 'Availability',
-    value: 'Open to Internships & Strategy Projects',
+    value: 'Open to Internships & Strategy Projects (2026)',
+    isClock: false,
+  },
+  {
+    label: 'Leadership Scope',
+    value: '120+ Students Led · 2 Organizations Founded',
+    isClock: false,
   },
 ];
 ---
 
-<section class="info-strip hairline-top hairline-bottom" aria-label="Executive summary">
+<section class="info-strip surface-dark" aria-label="Executive metadata">
   <div class="container">
     <dl class="info-strip__grid">
       {
         items.map((item) => (
           <div class="info-strip__cell" data-reveal="up">
-            <dt class="eyebrow info-strip__label">{item.label}</dt>
-            <dd class="info-strip__value">{item.value}</dd>
+            <dt class="info-strip__label">{item.label}</dt>
+            <dd
+              class:list={['info-strip__value', { tabular: item.isClock }]}
+              data-jkt-clock={item.isClock ? '' : undefined}
+            >
+              {item.value}
+            </dd>
           </div>
         ))
       }
@@ -38,9 +55,47 @@ const items = [
   </div>
 </section>
 
+<script>
+  let clockTimer: number | null = null;
+
+  function formatJakartaTime(): string {
+    const formatter = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Asia/Jakarta',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
+    return `JKT ${formatter.format(new Date())}`;
+  }
+
+  function updateClock(): void {
+    const target = document.querySelector<HTMLElement>('[data-jkt-clock]');
+    if (target) target.textContent = formatJakartaTime();
+  }
+
+  function stopClock(): void {
+    if (clockTimer !== null) {
+      window.clearInterval(clockTimer);
+      clockTimer = null;
+    }
+  }
+
+  function startClock(): void {
+    stopClock();
+    updateClock();
+    clockTimer = window.setInterval(updateClock, 15_000);
+  }
+
+  document.addEventListener('astro:page-load', startClock);
+  document.addEventListener('astro:before-swap', stopClock);
+</script>
+
 <style>
   .info-strip {
-    background-color: var(--surface-elevated);
+    background-color: var(--bg-dark);
+    color: var(--ink-light);
+    border-top: 1px solid var(--border-hairline-dark);
+    border-bottom: 1px solid var(--border-hairline-dark);
   }
 
   .info-strip__grid {
@@ -50,10 +105,10 @@ const items = [
 
   .info-strip__cell {
     padding: var(--space-md) var(--space-sm);
-    border-right: 1px solid var(--border-hairline);
+    border-right: 1px solid var(--border-hairline-dark);
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.4rem;
   }
 
   .info-strip__cell:first-child {
@@ -67,14 +122,17 @@ const items = [
 
   .info-strip__label {
     font-size: 0.72rem;
-    color: var(--red);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--blue);
   }
 
   .info-strip__value {
     font-size: 0.94rem;
     font-weight: 500;
     line-height: 1.4;
-    color: var(--ink);
+    color: var(--ink-light);
   }
 
   @media (max-width: 1024px) {
@@ -84,7 +142,7 @@ const items = [
 
     .info-strip__cell {
       padding: var(--space-sm);
-      border-bottom: 1px solid var(--border-hairline);
+      border-bottom: 1px solid var(--border-hairline-dark);
     }
 
     .info-strip__cell:first-child {

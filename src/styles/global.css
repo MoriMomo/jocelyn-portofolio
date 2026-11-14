@@ -73,13 +73,25 @@ textarea {
 }
 
 :focus-visible {
-  outline: 2px solid var(--red);
+  outline: 2px solid var(--focus-ring, var(--red));
   outline-offset: 3px;
 }
 
+.surface-dark {
+  --focus-ring: var(--blue);
+  background-color: var(--bg-dark);
+  color: var(--ink-light);
+}
+
+.surface-light {
+  --focus-ring: var(--red);
+  background-color: var(--bg-light);
+  color: var(--ink-dark);
+}
+
 ::selection {
-  background-color: var(--cream);
-  color: var(--red);
+  background-color: var(--blue);
+  color: var(--ink);
 }
 
 /* Layout Utilities */
@@ -138,14 +150,14 @@ textarea {
 }
 
 .badge--cream {
-  background-color: var(--cream);
+  background-color: var(--surface-elevated);
   color: var(--ink);
   border: 1px solid var(--border-hairline);
 }
 
 .badge--red {
   background-color: var(--red);
-  color: var(--surface);
+  color: var(--cream);
 }
 
 .btn {
@@ -166,12 +178,13 @@ textarea {
 
 .btn--primary {
   background-color: var(--red);
-  color: var(--surface);
+  color: var(--cream);
   border-color: var(--red);
 }
 
 .btn--primary:hover {
   background-color: var(--ink);
+  color: var(--cream);
   border-color: var(--ink);
 }
 
@@ -182,8 +195,53 @@ textarea {
 }
 
 .btn--outline:hover {
-  background-color: var(--cream);
+  background-color: var(--ink);
+  color: var(--cream);
   border-color: var(--ink);
+}
+
+/* Signature double-text vertical slot hover */
+.roll-link {
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  line-height: 1.15;
+}
+
+.roll-text {
+  display: inline-block;
+  position: relative;
+  transition: transform 0.38s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+}
+
+.roll-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.roll-link:hover .roll-text,
+.roll-link:focus-visible .roll-text,
+.work-row:hover .roll-text,
+.work-row:focus-within .roll-text {
+  transform: translateY(-100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roll-text {
+    transition: none;
+  }
+  .roll-link:hover .roll-text,
+  .roll-link:focus-visible .roll-text,
+  .work-row:hover .roll-text,
+  .work-row:focus-within .roll-text {
+    transform: none;
+  }
 }
 
 .sr-only {
@@ -210,8 +268,9 @@ a.sr-only:focus-visible {
   margin: 0;
   overflow: visible;
   clip: auto;
-  background-color: var(--ink);
-  color: var(--cream);
+  background-color: var(--cream);
+  color: var(--ink);
+  border: 2px solid var(--red);
   font-size: var(--step--1);
   font-weight: 600;
   border-radius: var(--radius-sm);

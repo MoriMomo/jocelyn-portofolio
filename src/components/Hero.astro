@@ -1,102 +1,292 @@
 ---
+import { Image } from 'astro:assets';
+import portraitImg from '../assets/portrait.jpg';
 import Wordmark from './Wordmark.astro';
 ---
 
-<section class="hero">
-  <div class="container hero__inner">
-    <div class="hero__top">
-      <div class="hero__meta">
-        <p class="eyebrow">International Business Management · BINUS University</p>
-        <span class="badge badge--blue">Open to Internships & Consulting</span>
+<section id="top" class="hero surface-dark" aria-labelledby="hero-heading">
+  <div class="container hero__stage">
+    <!-- Centered Portrait Card backed by Sceptre Red Studio Panel -->
+    <div class="hero__portrait-wrap" data-reveal="up">
+      <div class="hero__portrait-card">
+        <Image
+          src={portraitImg}
+          alt="Jocelyn Lau, Business Strategist and International Business Management Scholar"
+          width={560}
+          height={760}
+          loading="eager"
+          decoding="sync"
+          class="hero__portrait-img"
+        />
+        <div class="hero__portrait-vignette" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <!-- Mid-Hero Horizontal Rule Row: HI THERE · Starburst · Hook Statement -->
+    <div class="hero__mid-band">
+      <div class="hero__mid-left">
+        <p class="hero__hi">HI THERE</p>
+        <p class="hero__loc">JAKARTA · BINUS</p>
       </div>
 
-      <h1 class="serif-heading hero__title" data-reveal="lines">
-        Building growth strategies, market-entry frameworks, and student-led initiatives that help local businesses <em>scale globally</em>.
-      </h1>
+      <div class="hero__star-slot" aria-hidden="true">
+        <svg class="hero__star" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 0L13.5 9.2L22.5 5.5L15.2 11.8L24 12L15.2 12.2L22.5 18.5L13.5 14.8L12 24L10.5 14.8L1.5 18.5L8.8 12.2L0 12L8.8 11.8L1.5 5.5L10.5 9.2L12 0Z"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
 
-      <div class="hero__sub-row" data-reveal="up">
-        <p class="hero__lead">
-          Jocelyn Lau is a business strategist, startup project manager, and student organization founder focused on elevating Indonesian enterprises (UMKM) to international competitiveness.
+      <div class="hero__mid-right" data-reveal="up">
+        <p class="hero__hook">
+          Building growth strategies for emerging ventures — structured, measurable, and built to lead.
         </p>
-        <div class="hero__actions">
-          <a href="#work" class="btn btn--primary">Explore Case Studies ↓</a>
-          <a href="#credentials" class="btn btn--outline">View Credentials</a>
-        </div>
+        <a href="#work" class="hero__cta roll-link">
+          <span class="roll-text" data-text="Explore Selected Work ↓">Explore Selected Work ↓</span>
+        </a>
       </div>
     </div>
 
-    <div class="hero__masthead hairline-top">
+    <!-- Broken Display Typographic Lockup Overlapping Lower Portrait -->
+    <h1 id="hero-heading" class="hero__display">
+      <span class="sr-only">Jocelyn Lau — Business Strategy, Consulting & Leadership Portfolio</span>
       <Wordmark variant="hero" />
-    </div>
+      <span class="hero__strategy-row" aria-hidden="true">
+        <span class="hero__strategy-meta">IBM · BINUS UNIVERSITY</span>
+        <span class="hero__strategy-word">.<span class="hero__strategy-italic">STR</span>ATEGY</span>
+      </span>
+    </h1>
   </div>
 </section>
 
 <style>
   .hero {
-    padding-top: var(--space-xl);
-    padding-bottom: var(--space-md);
+    background-color: var(--bg-dark);
+    color: var(--ink-light);
+    padding-top: var(--space-sm);
+    padding-bottom: clamp(4.5rem, 8vh, 5.75rem);
+    position: relative;
+    overflow-x: clip;
   }
 
-  .hero__inner {
+  .hero__stage {
+    position: relative;
+    min-height: clamp(32rem, 78svh, 48rem);
     display: flex;
     flex-direction: column;
-    gap: var(--space-lg);
+    justify-content: space-between;
   }
 
-  .hero__top {
-    display: flex;
-    flex-direction: column;
+  .hero__portrait-wrap {
+    position: absolute;
+    left: clamp(14%, 22vw, 28%);
+    top: 0;
+    width: clamp(15rem, 29vw, 24.5rem);
+    height: clamp(23rem, 62vh, 38rem);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .hero__portrait-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: radial-gradient(
+      circle at 55% 28%,
+      var(--color-sceptre-red) 0%,
+      var(--color-java-brown) 100%
+    );
+    border: 1px solid rgba(165, 188, 214, 0.16);
+  }
+
+  .hero__portrait-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 14%;
+    filter: contrast(1.06) saturate(0.92);
+  }
+
+  .hero__portrait-vignette {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        ellipse 58% 66% at 50% 42%,
+        rgba(77, 14, 18, 0.04) 26%,
+        rgba(77, 14, 18, 0.72) 68%,
+        rgba(35, 24, 21, 0.96) 98%
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(35, 24, 21, 0.35) 0%,
+        rgba(77, 14, 18, 0.06) 32%,
+        rgba(35, 24, 21, 0.92) 100%
+      );
+  }
+
+  .hero__mid-band {
+    position: relative;
+    z-index: 2;
+    margin-top: clamp(7.5rem, 18vh, 12.5rem);
+    padding-block: var(--space-sm);
+    border-top: 1px solid var(--border-hairline-dark);
+    display: grid;
+    grid-template-columns: 1fr auto minmax(16rem, 23rem);
+    align-items: start;
     gap: var(--space-md);
   }
 
-  .hero__meta {
+  .hero__mid-left {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .hero__hi {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--ink-light);
+  }
+
+  .hero__loc {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--blue);
+  }
+
+  .hero__star-slot {
+    justify-self: center;
+    padding-top: 0.15rem;
+  }
+
+  .hero__star {
+    color: var(--blue);
+    transform-origin: center;
+    transition: transform 0.6s var(--ease-out-expo);
+  }
+
+  .hero:hover .hero__star {
+    transform: rotate(45deg);
+  }
+
+  .hero__mid-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    gap: 0.65rem;
+  }
+
+  .hero__hook {
+    font-size: clamp(0.9rem, 0.84rem + 0.28vw, 1.05rem);
+    line-height: 1.45;
+    color: var(--ink-light);
+    max-width: 30ch;
+  }
+
+  .hero__cta {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue);
+    border-bottom: 1px solid rgba(165, 188, 214, 0.45);
+    padding-bottom: 0.15rem;
+  }
+
+  .hero__cta:hover {
+    color: var(--ink-light);
+    border-bottom-color: var(--ink-light);
+  }
+
+  .hero__display {
+    position: relative;
+    z-index: 3;
+    margin-top: clamp(2rem, 5vh, 4rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .hero__strategy-row {
+    display: flex;
+    align-items: baseline;
     justify-content: space-between;
-    gap: var(--space-xs);
+    gap: var(--space-md);
   }
 
-  .hero__title {
-    font-size: var(--step-4);
-    max-width: 24ch;
-    color: var(--ink);
-  }
-
-  .hero__title em {
-    font-style: italic;
-    color: var(--red);
+  .hero__strategy-meta {
+    font-size: 0.75rem;
     font-weight: 500;
+    letter-spacing: 0.14em;
+    color: var(--blue);
+    padding-left: 0.25rem;
   }
 
-  .hero__sub-row {
-    display: grid;
-    grid-template-columns: 1.2fr auto;
-    align-items: end;
-    gap: var(--space-lg);
-    padding-top: var(--space-xs);
+  .hero__strategy-word {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: clamp(2.1rem, 8.8vw, 7.5rem);
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+    color: var(--blue);
+    margin-left: auto;
   }
 
-  .hero__lead {
-    color: var(--soil);
-    max-width: 58ch;
-    font-size: var(--step-0);
+  .hero__strategy-italic {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
   }
 
-  .hero__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-xs);
-  }
+  @media (max-width: 900px) {
+    .hero {
+      padding-top: var(--space-2xs);
+      padding-bottom: 4.5rem;
+    }
 
-  .hero__masthead {
-    padding-top: var(--space-sm);
-  }
+    .hero__stage {
+      min-height: auto;
+      gap: 0.75rem;
+    }
 
-  @media (max-width: 860px) {
-    .hero__sub-row {
-      grid-template-columns: 1fr;
-      align-items: start;
+    .hero__portrait-wrap {
+      position: relative;
+      left: auto;
+      top: auto;
+      width: min(100%, 13.5rem);
+      height: auto;
+      aspect-ratio: 1 / 1.05;
+      margin-inline: auto;
+    }
+
+    .hero__mid-band {
+      margin-top: 0;
+      grid-template-columns: 1fr auto;
+      gap: var(--space-xs);
+    }
+
+    .hero__star-slot {
+      display: none;
+    }
+
+    .hero__mid-right {
+      grid-column: 1 / -1;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .hero__display {
+      margin-top: var(--space-xs);
+    }
+
+    .hero__strategy-meta {
+      display: none;
     }
   }
 </style>

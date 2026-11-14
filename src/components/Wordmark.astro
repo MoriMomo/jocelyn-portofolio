@@ -6,18 +6,25 @@ interface Props {
 const { variant = 'hero' } = Astro.props;
 const text = 'JOCELYN LAU';
 const chars = text.split('');
+const italicIndices = new Set([1, 9]);
 ---
 
 <div
   class:list={['wordmark', `wordmark--${variant}`]}
-  aria-label="Jocelyn Lau"
-  role="img"
+  aria-label={variant === 'hero' ? undefined : 'Jocelyn Lau'}
+  role={variant === 'hero' ? undefined : 'img'}
 >
   <span class="wordmark__track" aria-hidden="true">
     {
-      chars.map((char) => (
+      chars.map((char, idx) => (
         <span
-          class:list={['wordmark__char', { 'wordmark__char--space': char === ' ' }]}
+          class:list={[
+            'wordmark__char',
+            {
+              'wordmark__char--space': char === ' ',
+              'wordmark__char--italic': italicIndices.has(idx),
+            },
+          ]}
           data-wordmark-char={variant === 'hero' ? '' : undefined}
         >
           {char === ' ' ? '\u00A0' : char}
@@ -33,26 +40,26 @@ const chars = text.split('');
     overflow: hidden;
     user-select: none;
     line-height: 0.88;
-    padding-block: 0.08em;
+    padding-block: 0.06em;
   }
 
   .wordmark__track {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    font-size: clamp(2.55rem, 11.2vw, 10.25rem);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    font-size: clamp(2.25rem, 10.6vw, 9.8rem);
     white-space: nowrap;
   }
 
   .wordmark--hero {
-    color: var(--ink);
+    color: var(--ink-light);
   }
 
   .wordmark--footer {
-    color: var(--cream);
+    color: var(--ink-light);
     opacity: 0.92;
   }
 
@@ -60,7 +67,14 @@ const chars = text.split('');
     display: inline-block;
   }
 
+  .wordmark__char--italic {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    padding-right: 0.02em;
+  }
+
   .wordmark__char--space {
-    width: 0.22em;
+    width: 0.2em;
   }
 </style>
