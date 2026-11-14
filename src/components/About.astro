@@ -1,0 +1,263 @@
+---
+import { Image } from 'astro:assets';
+import portraitImg from '../assets/portrait.jpg';
+
+const competencies = [
+  {
+    category: 'Strategy & Business Consulting',
+    skills: [
+      'B2B Partnership & Growth Strategy',
+      'International Export & Market Entry',
+      'Business Case Dissection & Diagnostics',
+      'Structured Proposal & Pitch Architecture',
+    ],
+  },
+  {
+    category: 'Marketing & Brand Strategy',
+    skills: [
+      'Gen Z Consumer Ecosystem Design',
+      'TOFU / MOFU / BOFU Funnel Campaigns',
+      'Demand-to-Store Retail Activation',
+      'Primary Consumer Surveys & Benchmarking',
+    ],
+  },
+  {
+    category: 'Leadership & Governance',
+    skills: [
+      'Cross-Division Committee Leadership (40–80 Members)',
+      'Multi-Stakeholder & Client Alignment',
+      'Monthly Evaluation & KPI Cadence',
+      'Public Speaking & Peer Mentorship',
+    ],
+  },
+];
+---
+
+<section id="credentials" class="about-section hairline-top" aria-labelledby="about-heading">
+  <div class="container about-section__grid">
+    <!-- Left Column: Portrait & Executive Statement -->
+    <div class="about-profile" data-reveal="up">
+      <p class="eyebrow">Profile & Vision</p>
+      <h2 id="about-heading" class="serif-heading about-profile__title">
+        Empowering Indonesian Enterprises to Compete Internationally
+      </h2>
+
+      <div class="about-profile__card">
+        <div class="about-profile__portrait-wrap">
+          <Image
+            src={portraitImg}
+            alt="Jocelyn Lau in formal business blazer"
+            width={360}
+            height={460}
+            class="about-profile__portrait"
+          />
+        </div>
+        <div class="about-profile__bio">
+          <p>
+            I am pursuing my degree in <strong>International Business Management</strong> at <strong>Bina Nusantara University (BINUS)</strong>, inspired by representing Indonesia in the International Business Competition finals in Singapore.
+          </p>
+          <p>
+            My long-term vision is to foster entrepreneurial capability and elevate local Indonesian micro, small, and medium enterprises (<strong>UMKM</strong>) to an international standard—expanding sustainable employment opportunities where job access remains limited.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Education, Honors & Competencies -->
+    <div class="about-credentials" data-reveal="up">
+      <div class="credential-box">
+        <p class="eyebrow credential-box__eyebrow">Academic Background</p>
+        <div class="credential-box__row">
+          <div>
+            <h3 class="serif-heading credential-box__school">Bina Nusantara University (BINUS)</h3>
+            <p class="credential-box__major">Undergraduate · International Business Management</p>
+          </div>
+          <span class="badge badge--cream">Active Student</span>
+        </div>
+        <p class="credential-box__note">
+          Active Project Manager and Case Competitor within <strong>Do Well Do Good (DWDG) Future Leaders — BINUS Chapter</strong> and <strong>Students x CEOs (Sxcelerate)</strong>.
+        </p>
+      </div>
+
+      <div class="competencies">
+        <p class="eyebrow">Core Competencies</p>
+        <div class="competencies__list">
+          {
+            competencies.map((group) => (
+              <div class="competency-group hairline-top">
+                <h3 class="competency-group__title">{group.category}</h3>
+                <ul class="competency-group__items">
+                  {group.skills.map((skill) => (
+                    <li>{skill}</li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-section {
+    padding-block: var(--space-2xl);
+    background-color: var(--surface-elevated);
+  }
+
+  .about-section__grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .about-profile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .about-profile__title {
+    font-size: var(--step-3);
+    margin-bottom: var(--space-xs);
+  }
+
+  .about-profile__card {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--space-md);
+    align-items: start;
+    background-color: var(--surface);
+    padding: var(--space-md);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-md);
+  }
+
+  .about-profile__portrait-wrap {
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-hairline);
+    background-color: var(--cream);
+  }
+
+  .about-profile__portrait {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .about-profile__bio {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    font-size: 0.98rem;
+    color: var(--ink);
+  }
+
+  .about-credentials {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .credential-box {
+    background-color: var(--cream);
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .credential-box__eyebrow {
+    color: var(--red);
+  }
+
+  .credential-box__row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+
+  .credential-box__school {
+    font-size: var(--step-1);
+    font-weight: 600;
+  }
+
+  .credential-box__major {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--soil);
+  }
+
+  .credential-box__note {
+    font-size: 0.92rem;
+    color: var(--ink);
+    padding-top: 0.25rem;
+  }
+
+  .competencies {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .competencies__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .competency-group {
+    padding-block: var(--space-sm);
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: var(--space-sm);
+  }
+
+  .competency-group__title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .competency-group__items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.93rem;
+    color: var(--soil);
+  }
+
+  .competency-group__items li::before {
+    content: '— ';
+    color: var(--red);
+    font-weight: 600;
+  }
+
+  @media (max-width: 980px) {
+    .about-section__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .about-profile__card {
+      grid-template-columns: 1fr;
+    }
+
+    .about-profile__portrait-wrap {
+      max-width: 200px;
+    }
+
+    .competency-group {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

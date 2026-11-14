@@ -1,0 +1,153 @@
+---
+const highlights = [
+  {
+    metric: '2nd Place',
+    tag: 'National & International',
+    title: 'Indonesian Representative in Singapore',
+    detail: 'Co-created AquiPlan export innovation for Australia; placed 2nd nationally and competed at the International Finals in Singapore.',
+    accent: 'blue',
+  },
+  {
+    metric: '3rd Place',
+    tag: 'Business Case Competition',
+    title: 'DWDG BINUS Case Winner & 5th at BICON',
+    detail: 'Developed the HEXAGON Gen Z ecosystem strategy for ParagonCorp (#3 Winner) and C2M retail demand strategy for Crystalin (#5 Finalist).',
+    accent: 'cream',
+  },
+  {
+    metric: '40 Students',
+    tag: 'Project Leadership',
+    title: 'Project Leader — The Little Visionaries',
+    detail: 'Directed 40 university students across multiple divisions to deliver youth career and creative workshops at Yayasan Sosial Tangan Kasih.',
+    accent: 'cream',
+  },
+  {
+    metric: '80 Members',
+    tag: 'Organizational Founding',
+    title: 'Founded 2 Student Organizations',
+    detail: 'Established the 80-member, 10-division school Fellowship Community and founded the 7-group Business & Competition Prep Club.',
+    accent: 'blue',
+  },
+];
+---
+
+<section class="highlights" aria-labelledby="highlights-heading">
+  <div class="container">
+    <div class="highlights__header" data-reveal="up">
+      <p class="eyebrow">Quantifiable Impact</p>
+      <h2 id="highlights-heading" class="serif-heading highlights__title">
+        Track Record at a Glance
+      </h2>
+    </div>
+
+    <div class="highlights__grid">
+      {
+        highlights.map((card) => (
+          <article
+            class:list={['highlight-card', `highlight-card--${card.accent}`]}
+            data-reveal="up"
+          >
+            <div class="highlight-card__top">
+              <span class="tabular serif-heading highlight-card__metric">{card.metric}</span>
+              <span class="highlight-card__tag">{card.tag}</span>
+            </div>
+            <h3 class="highlight-card__heading">{card.title}</h3>
+            <p class="highlight-card__detail">{card.detail}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .highlights {
+    padding-block: var(--space-xl);
+  }
+
+  .highlights__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  .highlights__title {
+    font-size: var(--step-3);
+  }
+
+  .highlights__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
+  }
+
+  .highlight-card {
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-hairline);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .highlight-card--cream {
+    background-color: var(--cream);
+    color: var(--ink);
+  }
+
+  .highlight-card--blue {
+    background-color: var(--blue);
+    color: var(--ink);
+  }
+
+  .highlight-card__top {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid rgba(35, 24, 21, 0.16);
+  }
+
+  .highlight-card__metric {
+    font-size: var(--step-3);
+    font-weight: 600;
+    color: var(--red);
+  }
+
+  .highlight-card__tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--soil);
+  }
+
+  .highlight-card__heading {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--ink);
+    padding-top: 0.25rem;
+  }
+
+  .highlight-card__detail {
+    font-size: 0.94rem;
+    color: var(--ink);
+    opacity: 0.88;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 1080px) {
+    .highlights__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .highlights__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

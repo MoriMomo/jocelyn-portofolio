@@ -1,0 +1,110 @@
+---
+const items = [
+  {
+    label: 'Primary Focus',
+    value: 'Business Strategy, B2B Consulting & Gen Z Marketing',
+  },
+  {
+    label: 'Education',
+    value: 'International Business Management, BINUS University',
+  },
+  {
+    label: 'Case Honors',
+    value: '2nd National (Singapore Finals) · 3rd DWDG · 5th BICON',
+  },
+  {
+    label: 'Leadership Scope',
+    value: '120+ Students Led Across 3 Organizations',
+  },
+  {
+    label: 'Availability',
+    value: 'Open to Internships & Strategy Projects',
+  },
+];
+---
+
+<section class="info-strip hairline-top hairline-bottom" aria-label="Executive summary">
+  <div class="container">
+    <dl class="info-strip__grid">
+      {
+        items.map((item) => (
+          <div class="info-strip__cell" data-reveal="up">
+            <dt class="eyebrow info-strip__label">{item.label}</dt>
+            <dd class="info-strip__value">{item.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  .info-strip {
+    background-color: var(--surface-elevated);
+  }
+
+  .info-strip__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .info-strip__cell {
+    padding: var(--space-md) var(--space-sm);
+    border-right: 1px solid var(--border-hairline);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .info-strip__cell:first-child {
+    padding-left: 0;
+  }
+
+  .info-strip__cell:last-child {
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .info-strip__label {
+    font-size: 0.72rem;
+    color: var(--red);
+  }
+
+  .info-strip__value {
+    font-size: 0.94rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  @media (max-width: 1024px) {
+    .info-strip__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .info-strip__cell {
+      padding: var(--space-sm);
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .info-strip__cell:first-child {
+      padding-left: var(--space-sm);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .info-strip__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .info-strip__cell,
+    .info-strip__cell:first-child {
+      padding-inline: 0;
+      border-right: none;
+    }
+
+    .info-strip__cell:last-child {
+      border-bottom: none;
+    }
+  }
+</style>

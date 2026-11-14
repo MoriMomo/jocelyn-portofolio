@@ -1,12 +1,22 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import InfoStrip from '../components/InfoStrip.astro';
+import Highlights from '../components/Highlights.astro';
+import WorkList from '../components/WorkList.astro';
+import About from '../components/About.astro';
+
+const workEntries = await getCollection('work');
 ---
 
 <Base
-  title="Jocelyn Lau — Strategy, Business Consulting & Leadership Portfolio"
-  description="Portfolio of Jocelyn Lau, International Business Management student at BINUS University specializing in business strategy, B2B consulting, and student leadership."
+  title="Jocelyn Lau — Business Strategy, Consulting & Leadership Portfolio"
+  description="Executive portfolio of Jocelyn Lau, International Business Management student at BINUS University specializing in B2B consulting, export strategy, and student leadership."
 >
-  <section class="container">
-    <h1 class="serif-heading">Jocelyn Lau</h1>
-  </section>
+  <Hero />
+  <InfoStrip />
+  <Highlights />
+  <WorkList entries={workEntries} />
+  <About />
 </Base>
