@@ -1,0 +1,104 @@
+[
+  {
+    "out": "src/assets/portrait.jpg",
+    "slide": 20,
+    "box": [1300, 565, 1482, 888],
+    "comment": "Formal blazer solo portrait of Jocelyn from DWDG consulting team photo (Slide 20)"
+  },
+  {
+    "out": "src/assets/portrait-casual.jpg",
+    "slide": 2,
+    "box": [1298, 236, 1796, 891],
+    "comment": "Casual portrait from About Me slide (Slide 2) kept in reserve"
+  },
+  {
+    "out": "src/assets/work/aquiplan/cover.jpg",
+    "slide": 17,
+    "box": [95, 384, 960, 932],
+    "comment": "AquiPlan FedEx / Prestasi Junior Indonesia cover slide"
+  },
+  {
+    "out": "src/assets/work/ace-benihbunbun/cover.jpg",
+    "slide": 20,
+    "box": [132, 329, 1126, 892],
+    "comment": "ACE Strategy BenihBunbun DWDG presentation cover"
+  },
+  {
+    "out": "src/assets/work/ace-benihbunbun/team.jpg",
+    "slide": 20,
+    "box": [1159, 336, 1789, 890],
+    "comment": "DWDG BINUS consulting team formal photo"
+  },
+  {
+    "out": "src/assets/work/hexagon-paragon/cover.jpg",
+    "slide": 22,
+    "box": [65, 355, 1164, 974],
+    "comment": "HEXAGON Strategy ParagonCorp cover slide"
+  },
+  {
+    "out": "src/assets/work/hexagon-paragon/winners.jpg",
+    "slide": 22,
+    "box": [1184, 349, 1752, 974],
+    "comment": "DWDG BINUS Case Competition winners announcement (#3 Polisi Tidur)"
+  },
+  {
+    "out": "src/assets/work/little-visionaries/cover.jpg",
+    "slide": 14,
+    "box": [142, 362, 921, 910],
+    "comment": "40 BINUS students team photo at Yayasan Sosial Tangan Kasih"
+  },
+  {
+    "out": "src/assets/work/little-visionaries/workshop.jpg",
+    "slide": 14,
+    "box": [940, 362, 1788, 910],
+    "comment": "Children holding hand-painted tote bags at The Little Visionaries workshop"
+  },
+  {
+    "out": "src/assets/work/c2m-crystalin/cover.jpg",
+    "slide": 26,
+    "box": [52, 364, 1130, 971],
+    "comment": "C2M Strategy Crystalin cover slide"
+  },
+  {
+    "out": "src/assets/work/c2m-crystalin/team.jpg",
+    "slide": 26,
+    "box": [1165, 362, 1744, 971],
+    "comment": "BICON NATION team photo holding Crystalin bottles"
+  },
+  {
+    "out": "src/assets/work/smart-queue-kopi-kenangan/cover.jpg",
+    "slide": 24,
+    "box": [52, 343, 1002, 878],
+    "comment": "Smart Queue & Routine Pick-up Assistant for Kopi Kenangan cover"
+  },
+  {
+    "out": "src/assets/work/smart-queue-kopi-kenangan/forum.jpg",
+    "slide": 24,
+    "box": [1029, 343, 1840, 878],
+    "comment": "Students x CEOs Sxcelerate forum team photo"
+  },
+  {
+    "out": "src/assets/work/sahabatbulu/cover.jpg",
+    "slide": 28,
+    "box": [448, 351, 1533, 755],
+    "comment": "SahabatBulu marketing strategy cover cropped above student IDs"
+  },
+  {
+    "out": "src/assets/work/fellowship-community/cover.jpg",
+    "slide": 5,
+    "box": [245, 380, 1705, 868],
+    "comment": "Fellowship Community division leaders photo (cropped below title descender and above caption)"
+  },
+  {
+    "out": "src/assets/work/business-club/cover.jpg",
+    "slide": 10,
+    "box": [230, 362, 1656, 910],
+    "comment": "High school Business Club members photo (cropped below title descender and above caption)"
+  },
+  {
+    "out": "src/assets/work/arupadatu-website/cover.jpg",
+    "slide": 18,
+    "box": [64, 410, 810, 826],
+    "comment": "PT Arsitek Arupadatu website screenshot"
+  }
+]
