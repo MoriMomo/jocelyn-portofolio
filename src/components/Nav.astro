@@ -97,83 +97,10 @@ const navLinks = [
 </header>
 
 <script>
-  let navController: AbortController | null = null;
-
-  function setupMobileMenu() {
-    navController?.abort();
-    navController = new AbortController();
-    const { signal } = navController;
-
-    const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
-    const menu = document.querySelector<HTMLElement>('[data-mobile-menu]');
-    const label = document.querySelector<HTMLElement>('[data-menu-label]');
-    if (!toggle || !menu) return;
-
-    const focusables = () =>
-      Array.from(menu.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'));
-
-    const closeMenu = () => {
-      toggle.setAttribute('aria-expanded', 'false');
-      menu.hidden = true;
-      document.body.style.overflow = '';
-      if (label) label.textContent = 'Menu';
-    };
-
-    const openMenu = () => {
-      toggle.setAttribute('aria-expanded', 'true');
-      menu.hidden = false;
-      document.body.style.overflow = 'hidden';
-      if (label) label.textContent = 'Close';
-      const firstLink = focusables()[0];
-      firstLink?.focus();
-    };
-
-    toggle.addEventListener(
-      'click',
-      () => {
-        const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-        if (isOpen) closeMenu();
-        else openMenu();
-      },
-      { signal },
-    );
-
-    menu.querySelectorAll('[data-mobile-link]').forEach((link) => {
-      link.addEventListener('click', closeMenu, { signal });
-    });
-
-    document.addEventListener(
-      'keydown',
-      (e) => {
-        if (toggle.getAttribute('aria-expanded') !== 'true') return;
-
-        if (e.key === 'Escape') {
-          closeMenu();
-          toggle.focus();
-          return;
-        }
-
-        if (e.key === 'Tab') {
-          const items = [toggle, ...focusables()];
-          if (items.length === 0) return;
-          const first = items[0];
-          const last = items[items.length - 1];
-
-          if (e.shiftKey && document.activeElement === first) {
-            e.preventDefault();
-            last.focus();
-          } else if (!e.shiftKey && document.activeElement === last) {
-            e.preventDefault();
-            first.focus();
-          }
-        }
-      },
-      { signal },
-    );
-  }
+  import { setupMobileMenu, cleanupMobileMenu } from '../scripts/mobileMenu';
 
   document.addEventListener('astro:page-load', setupMobileMenu);
-  document.addEventListener('astro:before-swap', () => navController?.abort());
+  document.addEventListener('astro:before-swap', cleanupMobileMenu);
 </script>
 
 <style>
