@@ -205,7 +205,7 @@ const isHome = Astro.url.pathname === '/';
     color: var(--ink-light);
     border: 1px solid var(--border-strong-dark);
     border-radius: var(--radius-md);
-    box-shadow: 0 10px 28px rgba(35, 24, 21, 0.32);
+    box-shadow: 0 10px 28px rgba(131, 0, 0, 0.28);
     transition: border-color var(--duration-fast) ease, background-color var(--duration-fast) ease;
   }
 
@@ -317,27 +317,27 @@ const isHome = Astro.url.pathname === '/';
   }
 
   .btn--red-on-dark {
-    background-color: var(--red);
-    color: var(--cream);
-    border-color: var(--red);
+    background-color: var(--color-scarlet);
+    color: var(--color-white);
+    border-color: var(--color-scarlet);
   }
 
   .btn--red-on-dark:hover {
-    background-color: var(--cream);
-    color: var(--ink);
-    border-color: var(--cream);
+    background-color: var(--color-red);
+    color: var(--color-black);
+    border-color: var(--color-red);
   }
 
   .btn--outline-on-dark {
     background-color: transparent;
-    color: var(--cream);
+    color: var(--color-white);
     border-color: var(--border-strong-dark);
   }
 
   .btn--outline-on-dark:hover {
-    background-color: var(--blue);
-    color: var(--ink);
-    border-color: var(--blue);
+    background-color: var(--color-red);
+    color: var(--color-black);
+    border-color: var(--color-red);
   }
 
   @media (max-width: 860px) {

@@ -1,34 +1,34 @@
 :root {
-  /* Strict 5-Color Client Pantone Palette */
-  --color-transparent-yellow: #F5EFC6;
-  --color-sceptre-red: #4D0E12;
-  --color-cerulean-blue: #A5BCD6;
-  --color-potting-soil: #4A2E27;
-  --color-java-brown: #231815;
+  /* ColorHunt Palette: https://colorhunt.co/palette/000000830000bc0202ff0000 */
+  --color-black: #000000;
+  --color-crimson: #830000;
+  --color-scarlet: #BC0202;
+  --color-red: #FF0000;
+  --color-white: #FFFFFF;
 
-  /* Semantic Surface & Ink Aliases (100% from the 5 Pantone values) */
-  --bg-dark: var(--color-java-brown);
-  --bg-light: var(--color-transparent-yellow);
-  --bg-soil: var(--color-potting-soil);
-  --ink-dark: var(--color-java-brown);
-  --ink-light: var(--color-transparent-yellow);
+  /* Semantic Surface & Ink Aliases */
+  --bg-dark: var(--color-black);
+  --bg-light: var(--color-black);
+  --bg-soil: var(--color-crimson);
+  --ink-dark: var(--color-white);
+  --ink-light: var(--color-white);
 
-  /* Backward-compatible Palette Aliases */
-  --surface: var(--color-transparent-yellow);
-  --cream: var(--color-transparent-yellow);
-  --ink: var(--color-java-brown);
-  --red: var(--color-sceptre-red);
-  --soil: var(--color-potting-soil);
-  --blue: var(--color-cerulean-blue);
+  /* Palette Aliases */
+  --surface: var(--color-black);
+  --cream: var(--color-white);
+  --ink: var(--color-white);
+  --red: var(--color-red);
+  --soil: rgba(255, 255, 255, 0.74);
+  --blue: var(--color-red);
 
-  /* Derived Hairlines & Tints (strictly from the 5 Pantone hexes) */
-  --border-hairline: rgba(74, 46, 39, 0.24);
-  --border-hairline-dark: rgba(245, 239, 198, 0.16);
-  --border-strong: rgba(35, 24, 21, 0.42);
-  --border-strong-dark: rgba(245, 239, 198, 0.34);
-  --surface-elevated: rgba(74, 46, 39, 0.08);
-  --blue-tint: rgba(165, 188, 214, 0.35);
-  --red-tint: rgba(77, 14, 18, 0.12);
+  /* Derived Hairlines & Tints */
+  --border-hairline: rgba(131, 0, 0, 0.55);
+  --border-hairline-dark: rgba(131, 0, 0, 0.55);
+  --border-strong: rgba(188, 2, 2, 0.75);
+  --border-strong-dark: rgba(188, 2, 2, 0.75);
+  --surface-elevated: rgba(131, 0, 0, 0.16);
+  --blue-tint: rgba(131, 0, 0, 0.24);
+  --red-tint: rgba(255, 0, 0, 0.14);
 
   /* Typography */
   --font-display: 'Playfair Display Variable', 'Playfair Display', Georgia, serif;

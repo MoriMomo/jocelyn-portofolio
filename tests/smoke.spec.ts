@@ -182,7 +182,7 @@ test.describe('Jocelyn Lau Portfolio Smoke & Review Suite', () => {
     expect(errors).toEqual([]);
   });
 
-  test('built assets contain only the 5 Pantone palette hexes and no personal phone/student IDs', async () => {
+  test('built assets apply the black-and-red ColorHunt palette and leak no personal phone/student IDs', async () => {
     const distDir = path.resolve('dist');
     const htmlFiles: string[] = [];
     const cssFiles: string[] = [];
@@ -206,12 +206,14 @@ test.describe('Jocelyn Lau Portfolio Smoke & Review Suite', () => {
       expect(content).not.toContain('2902654751');
       expect(content).not.toContain('2902669072');
       expect(content.toLowerCase()).not.toContain('fcfbf4');
+      expect(content.toLowerCase()).not.toContain('f5efc6');
     }
 
-    for (const file of cssFiles) {
-      const content = await fs.readFile(file, 'utf8');
-      expect(content.toLowerCase()).not.toContain('fcfbf4');
-      expect(content).not.toContain('252, 251, 244');
-    }
+    const joinedCss = (await Promise.all(cssFiles.map((f) => fs.readFile(f, 'utf8')))).join('\n').toLowerCase();
+    expect(joinedCss).not.toContain('fcfbf4');
+    expect(joinedCss).not.toContain('f5efc6');
+    expect(joinedCss).toContain('#830000');
+    expect(joinedCss).toContain('#bc0202');
+    expect(joinedCss).toMatch(/#ff0000|#f00/);
   });
 });

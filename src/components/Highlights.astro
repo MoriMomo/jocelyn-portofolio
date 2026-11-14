@@ -92,14 +92,17 @@ const highlights = [
   }
 
   .highlight-card--cream {
-    background-color: var(--surface-elevated);
-    border-top: 3px solid var(--red);
-    color: var(--ink);
+    background-color: var(--color-black);
+    border: 1px solid var(--color-crimson);
+    border-top: 3px solid var(--color-red);
+    color: var(--color-white);
   }
 
   .highlight-card--blue {
-    background-color: var(--blue);
-    color: var(--ink);
+    background-color: rgba(131, 0, 0, 0.14);
+    border: 1px solid var(--color-scarlet);
+    border-top: 3px solid var(--color-red);
+    color: var(--color-white);
   }
 
   .highlight-card__top {
@@ -107,7 +110,7 @@ const highlights = [
     flex-direction: column;
     gap: 0.25rem;
     padding-bottom: var(--space-xs);
-    border-bottom: 1px solid rgba(35, 24, 21, 0.16);
+    border-bottom: 1px solid var(--border-hairline);
   }
 
   .highlight-card__metric {
