@@ -35,17 +35,18 @@ const competencies = [
 ---
 
 <section id="credentials" class="about-section hairline-top" aria-labelledby="about-heading">
-  <Grainient
-    colors={['#111113', '#1c090b', '#4d080a', '#830000', '#bc0202']}
-    angle={125}
-    flow={0.75}
-    speed={0.45}
-    silk={0.3}
-    grainAmount={0.07}
-    contrast={0.95}
-    saturation={0.9}
-    className="about-section__bg"
-  />
+  <div class="about-section__bg" aria-hidden="true">
+    <Grainient
+      colors={['#111113', '#1c090b', '#4d080a', '#830000', '#bc0202']}
+      angle={125}
+      flow={0.75}
+      speed={0.45}
+      silk={0.3}
+      grainAmount={0.07}
+      contrast={0.95}
+      saturation={0.9}
+    />
+  </div>
 
   <div class="container about-section__inner">
     <header class="about-header" data-reveal="up">

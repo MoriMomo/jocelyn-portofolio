@@ -10,22 +10,24 @@ const portraitAsset = await getImage({ src: lanyardPortraitImg, width: 800, form
 ---
 
 <section id="top" class="hero surface-dark" aria-labelledby="hero-heading">
-  <PixelSnow
-    color="#e8e2de"
-    variant="snowflake"
-    density={0.32}
-    speed={0.6}
-    wind={0.18}
-    sway={0.45}
-    flakeSize={0.85}
-    pixelSize={2}
-    glow={0.5}
-    twinkle={0.3}
-    fade={0.35}
-    opacity={0.45}
-    mouseInteraction={true}
-    className="hero__snow"
-  />
+  <div class="hero__snow" aria-hidden="true">
+    <PixelSnow
+      color="#f0eae6"
+      variant="snowflake"
+      density={0.45}
+      speed={0.55}
+      wind={0.18}
+      sway={0.45}
+      flakeSize={1}
+      pixelSize={3}
+      glow={0.75}
+      twinkle={0.35}
+      brightness={1.1}
+      fade={0.3}
+      opacity={0.72}
+      mouseInteraction={true}
+    />
+  </div>
   <div class="container hero__stage">
     <!-- Interactive 3D Lanyard Portrait Badge -->
     <div class="hero__portrait-wrap" data-reveal="up">
