@@ -105,9 +105,8 @@ textarea {
 .eyebrow {
   font-family: var(--font-sans);
   font-size: var(--step--1);
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.02em;
   color: var(--soil);
 }
 
@@ -145,14 +144,15 @@ textarea {
 }
 
 .badge--blue {
-  background-color: var(--color-scarlet);
+  background-color: rgba(131, 0, 0, 0.32);
+  border: 1px solid rgba(188, 2, 2, 0.42);
   color: var(--color-white);
 }
 
 .badge--cream {
   background-color: var(--surface-elevated);
   color: var(--color-white);
-  border: 1px solid var(--border-strong);
+  border: 1px solid rgba(240, 234, 230, 0.16);
 }
 
 .badge--red {
