@@ -1,32 +1,48 @@
 ---
-const highlights = [
+const groups = [
   {
-    metric: '2nd Place',
-    tag: 'National & International',
-    title: 'Indonesian Representative in Singapore',
-    detail: 'Co-created AquiPlan export innovation for Australia; placed 2nd nationally and competed at the International Finals in Singapore.',
-    accent: 'blue',
+    id: 'competitions',
+    label: '01 / Competitions',
+    cards: [
+      {
+        metric: '2nd Place',
+        tag: 'National & International',
+        title: 'Indonesian Representative in Singapore',
+        detail:
+          'Co-created AquiPlan export innovation for Australia; placed 2nd nationally and competed at the International Finals in Singapore.',
+        accent: 'blue',
+      },
+      {
+        metric: '3rd Place',
+        tag: 'Business Case Competition',
+        title: 'DWDG BINUS Case Winner & 5th at BICON',
+        detail:
+          'Developed the HEXAGON Gen Z ecosystem strategy for ParagonCorp (#3 Winner) and C2M retail demand strategy for Crystalin (#5 Finalist).',
+        accent: 'cream',
+      },
+    ],
   },
   {
-    metric: '3rd Place',
-    tag: 'Business Case Competition',
-    title: 'DWDG BINUS Case Winner & 5th at BICON',
-    detail: 'Developed the HEXAGON Gen Z ecosystem strategy for ParagonCorp (#3 Winner) and C2M retail demand strategy for Crystalin (#5 Finalist).',
-    accent: 'cream',
-  },
-  {
-    metric: '40 Students',
-    tag: 'Project Leadership',
-    title: 'Project Leader: The Little Visionaries',
-    detail: 'Directed 40 university students across multiple divisions to deliver youth career and creative workshops at Yayasan Sosial Tangan Kasih.',
-    accent: 'cream',
-  },
-  {
-    metric: '80 Members',
-    tag: 'Organizational Founding',
-    title: 'Founded 2 Student Organizations',
-    detail: 'Established the 80-member, 10-division school Fellowship Community and founded the 7-group Business & Competition Prep Club.',
-    accent: 'blue',
+    id: 'organizations',
+    label: '02 / Organizations & Leadership',
+    cards: [
+      {
+        metric: '40 Students',
+        tag: 'Project Leadership',
+        title: 'Project Leader: The Little Visionaries',
+        detail:
+          'Directed 40 university students across multiple divisions to deliver youth career and creative workshops at Yayasan Sosial Tangan Kasih.',
+        accent: 'cream',
+      },
+      {
+        metric: '80 Members',
+        tag: 'Organizational Founding',
+        title: 'Founded 2 Student Organizations',
+        detail:
+          'Established the 80-member, 10-division school Fellowship Community and founded the 7-group Business & Competition Prep Club.',
+        accent: 'blue',
+      },
+    ],
   },
 ];
 ---
@@ -40,20 +56,27 @@ const highlights = [
       </h2>
     </div>
 
-    <div class="highlights__grid">
+    <div class="highlights__groups">
       {
-        highlights.map((card) => (
-          <article
-            class:list={['highlight-card', `highlight-card--${card.accent}`]}
-            data-reveal="up"
-          >
-            <div class="highlight-card__top">
-              <span class="tabular serif-heading highlight-card__metric">{card.metric}</span>
-              <span class="highlight-card__tag">{card.tag}</span>
+        groups.map((group) => (
+          <div class="highlights__group" data-reveal="up">
+            <h3 class="highlights__group-label">{group.label}</h3>
+            <div class="highlights__grid">
+              {group.cards.map((card) => (
+                <article
+                  class:list={['highlight-card', `highlight-card--${card.accent}`]}
+                  data-reveal="up"
+                >
+                  <div class="highlight-card__top">
+                    <span class="tabular serif-heading highlight-card__metric">{card.metric}</span>
+                    <span class="highlight-card__tag">{card.tag}</span>
+                  </div>
+                  <h4 class="highlight-card__heading">{card.title}</h4>
+                  <p class="highlight-card__detail">{card.detail}</p>
+                </article>
+              ))}
             </div>
-            <h3 class="highlight-card__heading">{card.title}</h3>
-            <p class="highlight-card__detail">{card.detail}</p>
-          </article>
+          </div>
         ))
       }
     </div>
@@ -76,9 +99,31 @@ const highlights = [
     font-size: var(--step-3);
   }
 
+  .highlights__groups {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .highlights__group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .highlights__group-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--red);
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-hairline-dark);
+  }
+
   .highlights__grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-md);
   }
 
@@ -142,12 +187,6 @@ const highlights = [
     color: var(--ink);
     opacity: 0.88;
     line-height: 1.55;
-  }
-
-  @media (max-width: 1080px) {
-    .highlights__grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
   }
 
   @media (max-width: 600px) {

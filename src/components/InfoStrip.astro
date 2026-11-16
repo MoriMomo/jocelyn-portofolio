@@ -1,36 +1,12 @@
 ---
-const initialClock = `JKT ${new Intl.DateTimeFormat('en-GB', {
-  timeZone: 'Asia/Jakarta',
-  hour: '2-digit',
-  minute: '2-digit',
-  hour12: false,
-}).format(new Date())}`;
-
 const items = [
   {
     label: 'Primary Focus',
-    value: 'Business Strategy, B2B Consulting & Gen Z Marketing',
-    isClock: false,
+    value: 'Business Strategy, Consulting, Marketing',
   },
   {
     label: 'Education',
     value: 'International Business Management · BINUS University',
-    isClock: false,
-  },
-  {
-    label: 'Local Time',
-    value: initialClock,
-    isClock: true,
-  },
-  {
-    label: 'Availability',
-    value: 'Open for 2026 Strategy & Consulting Internships',
-    isClock: false,
-  },
-  {
-    label: 'Leadership Scope',
-    value: '40-Student Teams · 2 Organizations Founded',
-    isClock: false,
   },
 ];
 ---
@@ -42,53 +18,13 @@ const items = [
         items.map((item) => (
           <div class="info-strip__cell" data-reveal="up">
             <dt class="info-strip__label">{item.label}</dt>
-            <dd
-              class:list={['info-strip__value', { tabular: item.isClock }]}
-              data-jkt-clock={item.isClock ? '' : undefined}
-            >
-              {item.value}
-            </dd>
+            <dd class="info-strip__value">{item.value}</dd>
           </div>
         ))
       }
     </dl>
   </div>
 </section>
-
-<script>
-  let clockTimer: number | null = null;
-
-  function formatJakartaTime(): string {
-    const formatter = new Intl.DateTimeFormat('en-GB', {
-      timeZone: 'Asia/Jakarta',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    });
-    return `JKT ${formatter.format(new Date())}`;
-  }
-
-  function updateClock(): void {
-    const target = document.querySelector<HTMLElement>('[data-jkt-clock]');
-    if (target) target.textContent = formatJakartaTime();
-  }
-
-  function stopClock(): void {
-    if (clockTimer !== null) {
-      window.clearInterval(clockTimer);
-      clockTimer = null;
-    }
-  }
-
-  function startClock(): void {
-    stopClock();
-    updateClock();
-    clockTimer = window.setInterval(updateClock, 15_000);
-  }
-
-  document.addEventListener('astro:page-load', startClock);
-  document.addEventListener('astro:before-swap', stopClock);
-</script>
 
 <style>
   .info-strip {
@@ -100,7 +36,7 @@ const items = [
 
   .info-strip__grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .info-strip__cell {
@@ -135,21 +71,6 @@ const items = [
     color: var(--ink-light);
   }
 
-  @media (max-width: 1024px) {
-    .info-strip__grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .info-strip__cell {
-      padding: var(--space-sm);
-      border-bottom: 1px solid var(--border-hairline-dark);
-    }
-
-    .info-strip__cell:first-child {
-      padding-left: var(--space-sm);
-    }
-  }
-
   @media (max-width: 600px) {
     .info-strip__grid {
       grid-template-columns: 1fr;
@@ -158,7 +79,9 @@ const items = [
     .info-strip__cell,
     .info-strip__cell:first-child {
       padding-inline: 0;
+      padding-block: var(--space-sm);
       border-right: none;
+      border-bottom: 1px solid var(--border-hairline-dark);
     }
 
     .info-strip__cell:last-child {

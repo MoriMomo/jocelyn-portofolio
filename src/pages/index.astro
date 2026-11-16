@@ -3,7 +3,6 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import InfoStrip from '../components/InfoStrip.astro';
-import Manifesto from '../components/Manifesto.astro';
 import Highlights from '../components/Highlights.astro';
 import WorkList from '../components/WorkList.astro';
 import About from '../components/About.astro';
@@ -17,7 +16,6 @@ const workEntries = await getCollection('work');
 >
   <Hero />
   <InfoStrip />
-  <Manifesto />
   <Highlights />
   <WorkList entries={workEntries} />
   <About />
