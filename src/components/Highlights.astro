@@ -1,4 +1,6 @@
 ---
+import Dither from './Dither.astro';
+
 const groups = [
   {
     id: 'competitions',
@@ -48,7 +50,26 @@ const groups = [
 ---
 
 <section id="highlights" class="highlights surface-light" aria-labelledby="highlights-heading">
-  <div class="container">
+  <div class="highlights__bg" aria-hidden="true">
+    <Dither
+      palette={['#E6F1FA', '#D6E8F8', '#B8D6F0', '#5798D7', '#B9C255']}
+      ditherMode="bayer"
+      pixelSize={2}
+      waveSpeed={0.04}
+      waveFrequency={2.6}
+      waveAmplitude={0.28}
+      scale={1.15}
+      contrast={0.9}
+      brightness={-0.06}
+      mouseEffect="ripple"
+      mouseRadius={0.35}
+      mouseStrength={0.85}
+      trail={0.45}
+      clickRipple={true}
+    />
+  </div>
+
+  <div class="container highlights__inner">
     <div class="highlights__header" data-reveal="up">
       <p class="eyebrow">Quantifiable Impact</p>
       <h2 id="highlights-heading" class="serif-heading highlights__title" data-reveal="lines">
@@ -86,6 +107,23 @@ const groups = [
 <style>
   .highlights {
     padding-block: var(--space-xl);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .highlights__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.52;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  }
+
+  .highlights__inner {
+    position: relative;
+    z-index: 1;
   }
 
   .highlights__header {
@@ -116,8 +154,12 @@ const groups = [
     font-weight: 700;
     letter-spacing: 0.02em;
     color: var(--color-navy);
-    padding-bottom: 0.5rem;
+    background-color: rgba(230, 241, 250, 0.72);
+    backdrop-filter: blur(4px);
+    padding: 0.35rem 0.6rem;
+    border-radius: var(--radius-sm);
     border-bottom: 2px solid rgba(18, 35, 54, 0.22);
+    align-self: stretch;
   }
 
   .highlights__grid {
