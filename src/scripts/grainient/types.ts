@@ -49,7 +49,7 @@ export interface GrainientSettings {
   dpr?: number;
 }
 
-export const DEFAULT_COLORS = ['#111113', '#1c090b', '#4d080a', '#830000', '#bc0202'];
+export const DEFAULT_COLORS = ['#E6F1FA', '#D8E9F7', '#B6D3EE', '#5798D7', '#B9C255'];
 export const MAX_COLORS = 8;
 
 export const clamp = (value: number, min: number, max: number): number =>

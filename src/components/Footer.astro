@@ -92,8 +92,13 @@ const marqueeItems = [
 
 <style>
   .site-footer {
-    background-color: var(--bg-dark);
-    color: var(--ink-light);
+    background-color: var(--color-navy);
+    color: var(--color-frost);
+    --ink-light: var(--color-frost);
+    --cream: var(--color-frost);
+    --blue: var(--color-pistachio);
+    --border-hairline-dark: rgba(230, 241, 250, 0.16);
+    --border-strong-dark: rgba(230, 241, 250, 0.32);
     padding-top: var(--space-2xl);
     padding-bottom: clamp(4.75rem, 8vh, 6rem);
     margin-top: var(--space-2xl);
@@ -128,7 +133,7 @@ const marqueeItems = [
   }
 
   .site-footer__sub {
-    color: rgba(255, 255, 255, 0.84);
+    color: rgba(230, 241, 250, 0.84);
     max-width: 44ch;
     font-size: var(--step-0);
   }
@@ -174,26 +179,26 @@ const marqueeItems = [
   }
 
   .btn--footer-primary {
-    background-color: var(--color-white);
-    color: var(--color-black);
-    border-color: var(--color-white);
+    background-color: var(--color-pistachio);
+    color: var(--color-navy);
+    border-color: var(--color-pistachio);
   }
 
   .btn--footer-primary:hover {
-    background-color: var(--color-red);
-    border-color: var(--color-red);
-    color: var(--color-black);
+    background-color: var(--color-frost);
+    border-color: var(--color-frost);
+    color: var(--color-navy);
   }
 
   .btn--footer-outline {
     background-color: transparent;
-    color: var(--color-white);
-    border-color: var(--border-strong-dark);
+    color: var(--color-frost);
+    border-color: rgba(230, 241, 250, 0.34);
   }
 
   .btn--footer-outline:hover {
-    border-color: var(--color-red);
-    background-color: rgba(255, 0, 0, 0.14);
+    border-color: var(--color-denim);
+    background-color: rgba(87, 152, 215, 0.22);
   }
 
   .site-footer__wordmark {
@@ -242,7 +247,7 @@ const marqueeItems = [
   }
 
   .site-marquee__star {
-    color: var(--blue);
+    color: var(--color-denim);
     font-size: 0.9em;
   }
 
@@ -268,7 +273,7 @@ const marqueeItems = [
     align-items: center;
     gap: var(--space-sm);
     font-size: var(--step--1);
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(230, 241, 250, 0.74);
   }
 
   .site-footer__backtop {

@@ -206,11 +206,12 @@ const isHome = Astro.url.pathname === '/' || Astro.url.pathname === homeHref;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--bg-dark);
-    color: var(--ink-light);
-    border: 1px solid var(--border-strong-dark);
+    background-color: rgba(244, 249, 253, 0.92);
+    backdrop-filter: blur(10px);
+    color: var(--color-navy);
+    border: 1px solid rgba(18, 35, 54, 0.16);
     border-radius: var(--radius-md);
-    box-shadow: 0 10px 28px rgba(131, 0, 0, 0.28);
+    box-shadow: 0 10px 28px rgba(18, 35, 54, 0.1);
     transition: border-color var(--duration-fast) ease, background-color var(--duration-fast) ease;
   }
 
@@ -235,14 +236,15 @@ const isHome = Astro.url.pathname === '/' || Astro.url.pathname === homeHref;
   }
 
   .dock-menu__dots {
-    color: var(--blue);
+    color: var(--color-denim);
     flex-shrink: 0;
   }
 
   .dock-monogram:hover,
   .dock-menu:hover {
-    border-color: var(--blue);
-    background-color: var(--soil);
+    border-color: var(--color-denim);
+    background-color: var(--color-pistachio);
+    color: var(--color-navy);
   }
 
   .mobile-menu[hidden] {
@@ -322,27 +324,27 @@ const isHome = Astro.url.pathname === '/' || Astro.url.pathname === homeHref;
   }
 
   .btn--red-on-dark {
-    background-color: var(--color-scarlet);
-    color: var(--color-white);
-    border-color: var(--color-scarlet);
+    background-color: var(--color-navy);
+    color: var(--color-frost);
+    border-color: var(--color-navy);
   }
 
   .btn--red-on-dark:hover {
-    background-color: var(--color-red);
-    color: var(--color-black);
-    border-color: var(--color-red);
+    background-color: var(--color-denim-deep);
+    color: var(--color-white);
+    border-color: var(--color-denim-deep);
   }
 
   .btn--outline-on-dark {
     background-color: transparent;
-    color: var(--color-white);
+    color: var(--color-navy);
     border-color: var(--border-strong-dark);
   }
 
   .btn--outline-on-dark:hover {
-    background-color: var(--color-red);
-    color: var(--color-black);
-    border-color: var(--color-red);
+    background-color: var(--color-pistachio);
+    color: var(--color-navy);
+    border-color: var(--color-pistachio);
   }
 
   @media (max-width: 860px) {

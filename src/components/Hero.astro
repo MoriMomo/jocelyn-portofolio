@@ -11,7 +11,7 @@ const portraitAsset = await getImage({ src: lanyardPortraitImg, width: 800, form
 <section id="top" class="hero surface-dark" aria-labelledby="hero-heading">
   <div class="hero__snow" aria-hidden="true">
     <PixelSnow
-      color="#f0eae6"
+      color="#5798D7"
       variant="snowflake"
       density={0.45}
       speed={0.55}
@@ -19,11 +19,12 @@ const portraitAsset = await getImage({ src: lanyardPortraitImg, width: 800, form
       sway={0.45}
       flakeSize={1}
       pixelSize={3}
-      glow={0.75}
+      glow={0.55}
       twinkle={0.35}
-      brightness={1.1}
+      brightness={1}
       fade={0.3}
-      opacity={0.72}
+      opacity={0.65}
+      lightMode={true}
       mouseInteraction={true}
     />
   </div>
@@ -33,8 +34,8 @@ const portraitAsset = await getImage({ src: lanyardPortraitImg, width: 800, form
       <Lanyard
         frontImage={portraitAsset.src}
         alt="Jocelyn Lau, Business Strategist and International Business Management Scholar"
-        cardColor="#111113"
-        strapColor="#830000"
+        cardColor="#F4F9FD"
+        strapColor="#5798D7"
         metal="silver"
         finish="glossy"
         cornerRadius={0.22}
@@ -123,8 +124,8 @@ const portraitAsset = await getImage({ src: lanyardPortraitImg, width: 800, form
     border-radius: var(--radius-md);
     background: radial-gradient(
       ellipse 56% 52% at 50% 56%,
-      rgba(131, 0, 0, 0.32) 0%,
-      rgba(131, 0, 0, 0.08) 54%,
+      rgba(87, 152, 215, 0.22) 0%,
+      rgba(185, 194, 85, 0.12) 54%,
       transparent 78%
     );
   }
@@ -197,7 +198,7 @@ const portraitAsset = await getImage({ src: lanyardPortraitImg, width: 800, form
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--blue);
-    border-bottom: 1px solid rgba(255, 0, 0, 0.55);
+    border-bottom: 1px solid rgba(43, 108, 176, 0.45);
     line-height: 1.35;
     pointer-events: auto;
   }
@@ -240,7 +241,7 @@ const portraitAsset = await getImage({ src: lanyardPortraitImg, width: 800, form
     font-size: clamp(2.1rem, 8.8vw, 7.5rem);
     line-height: 0.96;
     letter-spacing: -0.04em;
-    color: var(--blue);
+    color: var(--color-denim);
     margin-left: auto;
   }
 

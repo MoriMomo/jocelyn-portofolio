@@ -10,7 +10,7 @@ const groups = [
         title: 'Indonesian Representative in Singapore',
         detail:
           'Co-created AquiPlan export innovation for Australia; placed 2nd nationally and competed at the International Finals in Singapore.',
-        accent: 'blue',
+        accent: 'cream',
       },
       {
         metric: '3rd Place',
@@ -32,7 +32,7 @@ const groups = [
         title: 'Project Leader: The Little Visionaries',
         detail:
           'Directed 40 university students across multiple divisions to deliver youth career and creative workshops at Yayasan Sosial Tangan Kasih.',
-        accent: 'cream',
+        accent: 'blue',
       },
       {
         metric: '80 Members',
@@ -115,9 +115,9 @@ const groups = [
     font-size: 0.84rem;
     font-weight: 600;
     letter-spacing: 0.02em;
-    color: var(--red);
+    color: var(--color-denim-deep);
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(240, 234, 230, 0.12);
+    border-bottom: 1px solid var(--border-hairline);
   }
 
   .highlights__grid {
@@ -129,23 +129,24 @@ const groups = [
   .highlight-card {
     padding: var(--space-md);
     border-radius: var(--radius-md);
-    border: 1px solid rgba(240, 234, 230, 0.12);
+    border: 1px solid rgba(18, 35, 54, 0.1);
     display: flex;
     flex-direction: column;
     gap: var(--space-xs);
   }
 
   .highlight-card--cream {
-    background-color: var(--color-black);
-    border: 1px solid rgba(240, 234, 230, 0.12);
-    color: var(--color-white);
+    background-color: var(--color-frost-elevated);
+    border: 1px solid rgba(87, 152, 215, 0.28);
+    border-top: 2px solid var(--color-denim);
+    color: var(--color-navy);
   }
 
   .highlight-card--blue {
-    background-color: rgba(131, 0, 0, 0.12);
-    border: 1px solid rgba(240, 234, 230, 0.14);
-    border-top: 2px solid var(--color-crimson);
-    color: var(--color-white);
+    background-color: rgba(185, 194, 85, 0.14);
+    border: 1px solid rgba(185, 194, 85, 0.45);
+    border-top: 2px solid var(--color-pistachio);
+    color: var(--color-navy);
   }
 
   .highlight-card__top {
@@ -159,8 +160,12 @@ const groups = [
   .highlight-card__metric {
     font-size: var(--step-2);
     font-weight: 600;
-    color: var(--red);
+    color: var(--color-denim-deep);
     white-space: nowrap;
+  }
+
+  .highlight-card--blue .highlight-card__metric {
+    color: var(--color-pistachio-deep);
   }
 
   .highlight-card__tag {

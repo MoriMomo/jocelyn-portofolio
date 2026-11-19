@@ -369,7 +369,7 @@ const totalPad = String(sorted.length).padStart(2, '0');
     letter-spacing: 0.02em;
     background-color: transparent;
     color: var(--soil);
-    border: 1px solid rgba(240, 234, 230, 0.16);
+    border: 1px solid rgba(18, 35, 54, 0.16);
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: color var(--duration-fast) ease, background-color var(--duration-fast) ease, border-color var(--duration-fast) ease;
@@ -381,9 +381,9 @@ const totalPad = String(sorted.length).padStart(2, '0');
   }
 
   .work-filter__btn.is-active {
-    background-color: var(--color-red);
-    color: var(--color-black);
-    border-color: var(--color-red);
+    background-color: var(--color-pistachio);
+    color: var(--color-navy);
+    border-color: var(--color-pistachio);
   }
 
   .work-table__head {
@@ -411,7 +411,7 @@ const totalPad = String(sorted.length).padStart(2, '0');
   }
 
   .work-row:hover {
-    background-color: var(--surface-elevated);
+    background-color: rgba(255, 255, 255, 0.65);
     padding-inline: var(--space-xs);
   }
 
@@ -505,9 +505,9 @@ const totalPad = String(sorted.length).padStart(2, '0');
     top: 0;
     left: 0;
     padding: 0.55rem 1rem;
-    background-color: var(--color-red);
-    color: var(--color-black);
-    border: 1px solid var(--color-black);
+    background-color: var(--color-pistachio);
+    color: var(--color-navy);
+    border: 1px solid var(--color-navy);
     border-radius: 999px;
     font-size: 0.72rem;
     font-weight: 600;
@@ -542,12 +542,12 @@ const totalPad = String(sorted.length).padStart(2, '0');
 
   .work-preview__item {
     display: none;
-    background-color: var(--bg-dark);
-    color: var(--ink-light);
-    border: 1px solid var(--border-strong-dark);
+    background-color: var(--color-frost-elevated);
+    color: var(--color-navy);
+    border: 1px solid rgba(18, 35, 54, 0.16);
     border-radius: var(--radius-md);
     padding: 0.45rem;
-    box-shadow: 0 22px 48px rgba(131, 0, 0, 0.35);
+    box-shadow: 0 22px 48px rgba(18, 35, 54, 0.14);
   }
 
   .work-preview__item.is-active {
@@ -559,7 +559,7 @@ const totalPad = String(sorted.length).padStart(2, '0');
     height: 185px;
     object-fit: cover;
     border-radius: var(--radius-sm);
-    background-color: var(--soil);
+    background-color: var(--color-frost);
   }
 
   .work-preview__caption {

@@ -90,8 +90,8 @@ textarea {
 }
 
 ::selection {
-  background-color: var(--color-red);
-  color: var(--color-black);
+  background-color: var(--color-pistachio);
+  color: var(--color-navy);
 }
 
 /* Layout Utilities */
@@ -144,20 +144,20 @@ textarea {
 }
 
 .badge--blue {
-  background-color: rgba(131, 0, 0, 0.32);
-  border: 1px solid rgba(188, 2, 2, 0.42);
-  color: var(--color-white);
+  background-color: var(--pistachio-tint);
+  border: 1px solid rgba(185, 194, 85, 0.65);
+  color: var(--color-navy);
 }
 
 .badge--cream {
-  background-color: var(--surface-elevated);
-  color: var(--color-white);
-  border: 1px solid rgba(240, 234, 230, 0.16);
+  background-color: var(--blue-tint);
+  color: var(--color-navy);
+  border: 1px solid rgba(87, 152, 215, 0.36);
 }
 
 .badge--red {
-  background-color: var(--color-red);
-  color: var(--color-black);
+  background-color: var(--color-pistachio);
+  color: var(--color-navy);
 }
 
 .btn {
@@ -177,27 +177,27 @@ textarea {
 }
 
 .btn--primary {
-  background-color: var(--color-scarlet);
-  color: var(--color-white);
-  border-color: var(--color-scarlet);
+  background-color: var(--color-navy);
+  color: var(--color-frost);
+  border-color: var(--color-navy);
 }
 
 .btn--primary:hover {
-  background-color: var(--color-red);
-  color: var(--color-black);
-  border-color: var(--color-red);
+  background-color: var(--color-denim-deep);
+  color: var(--color-white);
+  border-color: var(--color-denim-deep);
 }
 
 .btn--outline {
   background-color: transparent;
-  color: var(--color-white);
-  border-color: var(--border-strong);
+  color: var(--color-navy);
+  border-color: var(--border-strong-dark);
 }
 
 .btn--outline:hover {
-  background-color: var(--color-red);
-  color: var(--color-black);
-  border-color: var(--color-red);
+  background-color: var(--color-pistachio);
+  color: var(--color-navy);
+  border-color: var(--color-pistachio);
 }
 
 /* Signature double-text vertical slot hover */
@@ -272,9 +272,9 @@ a.sr-only:focus-visible {
   margin: 0;
   overflow: visible;
   clip: auto;
-  background-color: var(--color-red);
-  color: var(--color-black);
-  border: 2px solid var(--color-white);
+  background-color: var(--color-navy);
+  color: var(--color-frost);
+  border: 2px solid var(--color-denim);
   font-size: var(--step--1);
   font-weight: 600;
   border-radius: var(--radius-sm);
