@@ -1,3 +1,4 @@
+import { createColorResolver } from '../webglUtils';
 import {
   COMPOSITE_FRAGMENT,
   DOWN_FRAGMENT,
@@ -101,26 +102,6 @@ function drawQuadPass(
   gl.viewport(0, 0, width, height);
   gl.useProgram(entry.program);
   gl.drawArrays(gl.TRIANGLES, 0, 3);
-}
-
-function createColorResolver(): (value: string) => [number, number, number] {
-  const probe = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
-  const cache = new Map<string, [number, number, number]>();
-  return (value: string) => {
-    const cached = cache.get(value);
-    if (cached) return cached;
-    let rgb: [number, number, number] = [1, 1, 1];
-    if (probe) {
-      probe.clearRect(0, 0, 1, 1);
-      probe.fillStyle = '#ffffff';
-      probe.fillStyle = value;
-      probe.fillRect(0, 0, 1, 1);
-      const [r, g, b] = probe.getImageData(0, 0, 1, 1).data;
-      rgb = [r / 255, g / 255, b / 255];
-    }
-    cache.set(value, rgb);
-    return rgb;
-  };
 }
 
 function parseSnowSettings(container: HTMLElement): SnowSettings {
@@ -514,7 +495,7 @@ export function mountPixelSnow(container: HTMLElement): () => void {
   const { canvas, gl, res } = ctx;
 
   const s = parseSnowSettings(container);
-  const toRgb = createColorResolver();
+  const toRgb = createColorResolver({ fallback: '#ffffff', linear: false });
   const reduce = getReducedMotion();
   const rng = seededRng(4271);
   const flakes: Flake[] = [];

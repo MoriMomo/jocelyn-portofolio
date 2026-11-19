@@ -1,3 +1,4 @@
+import { createColorResolver, linkProgram, type LinkedProgram } from '../webglUtils';
 import { MAX_PALETTE, MAX_RIPPLES, MAX_TRAIL, RIPPLE_SECONDS, clamp, type RgbColor } from './types';
 
 const VERTEX = `#version 300 es
@@ -231,50 +232,15 @@ void main() {
   outColor = vec4(toSrgb(uBackground + offset), 1.0);
 }`;
 
-function compile(gl: WebGL2RenderingContext, type: number, source: string): WebGLShader | null {
-  const shader = gl.createShader(type);
-  if (!shader) return null;
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
-  gl.deleteShader(shader);
-  return null;
-}
-
 export function linkDitherProgram(
   gl: WebGL2RenderingContext,
   fragmentSource: string,
-): { program: WebGLProgram; uniforms: Record<string, WebGLUniformLocation | null> } | null {
-  const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX);
-  const fragment = compile(gl, gl.FRAGMENT_SHADER, fragmentSource);
-  const program = gl.createProgram();
-  if (!vertex || !fragment || !program) return null;
-  gl.attachShader(program, vertex);
-  gl.attachShader(program, fragment);
-  gl.bindAttribLocation(program, 0, 'aPosition');
-  gl.linkProgram(program);
-  gl.deleteShader(vertex);
-  gl.deleteShader(fragment);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    gl.deleteProgram(program);
-    return null;
-  }
-  const uniforms: Record<string, WebGLUniformLocation | null> = {};
-  const count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-  for (let i = 0; i < count; i++) {
-    const info = gl.getActiveUniform(program, i);
-    if (info) uniforms[info.name.replace('[0]', '')] = gl.getUniformLocation(program, info.name);
-  }
-  return { program, uniforms };
-}
-
-function toLinear(value: number): number {
-  return value <= 0.04045 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
+): LinkedProgram | null {
+  return linkProgram(gl, VERTEX, fragmentSource, ['aPosition']);
 }
 
 export function createDitherColorResolver(): (value: RgbColor) => [number, number, number] {
-  const probe = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
-  const cache = new Map<string, [number, number, number]>();
+  const resolveCss = createColorResolver({ fallback: '#000000', linear: true });
 
   return (value: RgbColor): [number, number, number] => {
     if (Array.isArray(value)) {
@@ -284,19 +250,6 @@ export function createDitherColorResolver(): (value: RgbColor) => [number, numbe
         clamp(Number(value[2]) || 0, 0, 1),
       ];
     }
-    const key = String(value);
-    const hit = cache.get(key);
-    if (hit) return hit;
-    let rgb: [number, number, number] = [0, 0, 0];
-    if (probe) {
-      probe.clearRect(0, 0, 1, 1);
-      probe.fillStyle = '#000000';
-      probe.fillStyle = key;
-      probe.fillRect(0, 0, 1, 1);
-      const [r, g, b] = probe.getImageData(0, 0, 1, 1).data;
-      rgb = [toLinear(r / 255), toLinear(g / 255), toLinear(b / 255)];
-    }
-    cache.set(key, rgb);
-    return rgb;
+    return resolveCss(value);
   };
 }

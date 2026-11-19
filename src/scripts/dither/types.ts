@@ -1,3 +1,6 @@
+import { clamp } from '../webglUtils';
+
+export { clamp };
 export type DitherMode =
   | 'bayer'
   | 'bayer4'
@@ -83,10 +86,6 @@ const EFFECTS: Record<DitherEffect, number> = {
   reveal: 1,
   ripple: 2,
 };
-
-export function clamp(value: number, min: number, max: number): number {
-  return Math.min(max, Math.max(min, value));
-}
 
 export function resolveDitherSettings(raw: DitherProps): DitherSettings {
   const palette = Array.isArray(raw.palette) ? raw.palette.filter(Boolean).slice(0, MAX_PALETTE) : [];

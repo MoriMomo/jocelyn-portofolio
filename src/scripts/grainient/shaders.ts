@@ -1,3 +1,5 @@
+import { linkProgram, toLinear, type LinkedProgram } from '../webglUtils';
+
 const VERTEX_SHADER = `#version 300 es
 out vec2 vUv;
 void main() {
@@ -183,13 +185,7 @@ void main() {
   outColor = vec4(clamp(color, 0.0, 1.0), 1.0);
 }`;
 
-export interface LinkedGrainientProgram {
-  program: WebGLProgram;
-  uniforms: Record<string, WebGLUniformLocation | null>;
-}
-
-const toLinear = (value: number): number =>
-  value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+export type LinkedGrainientProgram = LinkedProgram;
 
 export function toLab([r, g, b]: [number, number, number]): [number, number, number] {
   const lr = toLinear(r);
@@ -205,57 +201,9 @@ export function toLab([r, g, b]: [number, number, number]): [number, number, num
   ];
 }
 
-function compileShader(gl: WebGL2RenderingContext, type: number, source: string): WebGLShader | null {
-  const shader = gl.createShader(type);
-  if (!shader) return null;
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
-  gl.deleteShader(shader);
-  return null;
-}
-
-function readUniforms(
-  gl: WebGL2RenderingContext,
-  program: WebGLProgram,
-): Record<string, WebGLUniformLocation | null> {
-  const uniforms: Record<string, WebGLUniformLocation | null> = {};
-  const count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-  for (let i = 0; i < count; i++) {
-    const info = gl.getActiveUniform(program, i);
-    if (!info) continue;
-    const name = info.name.replace(/\[0\]$/, '');
-    uniforms[name] = gl.getUniformLocation(program, name);
-  }
-  return uniforms;
-}
-
-function attachAndLink(
-  gl: WebGL2RenderingContext,
-  vertex: WebGLShader,
-  fragment: WebGLShader,
-): LinkedGrainientProgram | null {
-  const program = gl.createProgram();
-  if (!program) return null;
-  gl.attachShader(program, vertex);
-  gl.attachShader(program, fragment);
-  gl.linkProgram(program);
-  gl.deleteShader(vertex);
-  gl.deleteShader(fragment);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    gl.deleteProgram(program);
-    return null;
-  }
-  return { program, uniforms: readUniforms(gl, program) };
-}
-
 export function linkGrainientProgram(
   gl: WebGL2RenderingContext,
   fragmentSource: string,
 ): LinkedGrainientProgram | null {
-  const vertex = compileShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER);
-  const fragment = compileShader(gl, gl.FRAGMENT_SHADER, fragmentSource);
-  if (!vertex) return null;
-  if (!fragment) return null;
-  return attachAndLink(gl, vertex, fragment);
+  return linkProgram(gl, VERTEX_SHADER, fragmentSource);
 }

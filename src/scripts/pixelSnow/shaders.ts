@@ -1,4 +1,7 @@
+import { linkProgram, type LinkedProgram } from '../webglUtils';
 import { VARIANTS, type SnowVariant } from './types';
+
+export { linkProgram, type LinkedProgram };
 
 const CELL = 9;
 export const LEVELS = 5;
@@ -221,70 +224,6 @@ void main() {
     outColor = vec4(color, max(color.r, max(color.g, color.b)));
   }
 }`;
-
-export interface LinkedProgram {
-  program: WebGLProgram;
-  uniforms: Record<string, WebGLUniformLocation | null>;
-}
-
-function compileShader(gl: WebGL2RenderingContext, type: number, source: string): WebGLShader | null {
-  const shader = gl.createShader(type);
-  if (!shader) return null;
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
-  gl.deleteShader(shader);
-  return null;
-}
-
-function readUniforms(
-  gl: WebGL2RenderingContext,
-  program: WebGLProgram,
-): Record<string, WebGLUniformLocation | null> {
-  const uniforms: Record<string, WebGLUniformLocation | null> = {};
-  const count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-  for (let i = 0; i < count; i++) {
-    const info = gl.getActiveUniform(program, i);
-    if (info) uniforms[info.name] = gl.getUniformLocation(program, info.name);
-  }
-  return uniforms;
-}
-
-function attachAndLink(
-  gl: WebGL2RenderingContext,
-  vertex: WebGLShader,
-  fragment: WebGLShader,
-  attributes: string[],
-): LinkedProgram | null {
-  const program = gl.createProgram();
-  if (!program) return null;
-
-  gl.attachShader(program, vertex);
-  gl.attachShader(program, fragment);
-  attributes.forEach((name, index) => gl.bindAttribLocation(program, index, name));
-  gl.linkProgram(program);
-  gl.deleteShader(vertex);
-  gl.deleteShader(fragment);
-
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    gl.deleteProgram(program);
-    return null;
-  }
-  return { program, uniforms: readUniforms(gl, program) };
-}
-
-export function linkProgram(
-  gl: WebGL2RenderingContext,
-  vertexSource: string,
-  fragmentSource: string,
-  attributes: string[],
-): LinkedProgram | null {
-  const vertex = compileShader(gl, gl.VERTEX_SHADER, vertexSource);
-  const fragment = compileShader(gl, gl.FRAGMENT_SHADER, fragmentSource);
-  if (!vertex) return null;
-  if (!fragment) return null;
-  return attachAndLink(gl, vertex, fragment, attributes);
-}
 
 function paintAtlasCell(
   data: Uint8Array,

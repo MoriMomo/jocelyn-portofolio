@@ -1,3 +1,6 @@
+import { clamp } from '../webglUtils';
+
+export { clamp };
 export type GrainientType = 'linear' | 'radial';
 
 export interface GrainientProps {
@@ -51,9 +54,6 @@ export interface GrainientSettings {
 
 export const DEFAULT_COLORS = ['#E6F1FA', '#D8E9F7', '#B6D3EE', '#5798D7', '#B9C255'];
 export const MAX_COLORS = 8;
-
-export const clamp = (value: number, min: number, max: number): number =>
-  Math.min(max, Math.max(min, value));
 
 const DEFAULTS: Omit<GrainientSettings, 'type'> & { type: GrainientType } = {
   colors: DEFAULT_COLORS,

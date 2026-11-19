@@ -63,22 +63,29 @@ const options: DitherProps = {
 
 <script>
   import { mountDither } from '../scripts/dither/mount';
+  import { scheduleIdleMount } from '../scripts/webglUtils';
 
   let cleanups: Array<() => void> = [];
+  let cancelIdle: (() => void) | null = null;
 
-  function initAllDither(): void {
+  function teardownAllDither(): void {
+    cancelIdle?.();
+    cancelIdle = null;
     cleanups.forEach((fn) => fn());
     cleanups = [];
-    document.querySelectorAll<HTMLElement>('[data-dither]').forEach((el) => {
-      cleanups.push(mountDither(el));
+  }
+
+  function initAllDither(): void {
+    teardownAllDither();
+    cancelIdle = scheduleIdleMount(() => {
+      document.querySelectorAll<HTMLElement>('[data-dither]').forEach((el) => {
+        cleanups.push(mountDither(el));
+      });
     });
   }
 
   document.addEventListener('astro:page-load', initAllDither);
-  document.addEventListener('astro:before-swap', () => {
-    cleanups.forEach((fn) => fn());
-    cleanups = [];
-  });
+  document.addEventListener('astro:before-swap', teardownAllDither);
 </script>
 
 <style>

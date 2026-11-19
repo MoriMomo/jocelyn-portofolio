@@ -91,9 +91,11 @@ const totalPad = String(sorted.length).padStart(2, '0');
                   <Image
                     src={entry.data.cover}
                     alt={entry.data.coverAlt}
-                    width={560}
-                    height={340}
-                    loading={idx < 3 ? 'eager' : 'lazy'}
+                    width={440}
+                    height={268}
+                    widths={[240, 440]}
+                    sizes="(max-width: 980px) 220px, 220px"
+                    loading="lazy"
                     class="work-row__thumb-img"
                   />
                 </div>

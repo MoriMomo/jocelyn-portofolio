@@ -1,3 +1,6 @@
+import { clamp } from '../webglUtils';
+
+export { clamp };
 export type SnowVariant = 'square' | 'round' | 'snowflake';
 
 export interface PixelSnowProps {
@@ -63,9 +66,6 @@ export interface Flake {
 }
 
 export const VARIANTS: SnowVariant[] = ['square', 'round', 'snowflake'];
-
-export const clamp = (value: number, min: number, max: number): number =>
-  Math.min(max, Math.max(min, value));
 
 const DEFAULTS: Omit<SnowSettings, 'variant'> & { variant: SnowVariant } = {
   color: '#ffffff',

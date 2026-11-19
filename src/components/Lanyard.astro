@@ -78,6 +78,7 @@ const options = {
 <div
   class:list={['lanyard', className]}
   data-lanyard={JSON.stringify(options)}
+  role={alt ? 'img' : undefined}
   aria-label={alt}
 >
   {
@@ -98,19 +99,27 @@ const options = {
   import type { LanyardOptions } from '../scripts/lanyard/types';
 
   let cleanups: Array<() => void> = [];
+  let pendingRaf = 0;
 
   function teardownLanyards(): void {
+    if (pendingRaf) {
+      cancelAnimationFrame(pendingRaf);
+      pendingRaf = 0;
+    }
     cleanups.forEach((fn) => fn());
     cleanups = [];
   }
 
   function initLanyards(): void {
     teardownLanyards();
-    document.querySelectorAll<HTMLElement>('[data-lanyard]').forEach((el) => {
-      const raw = el.dataset.lanyard;
-      if (!raw) return;
-      const opts = JSON.parse(raw) as LanyardOptions;
-      cleanups.push(mountLanyard(el, opts));
+    pendingRaf = requestAnimationFrame(() => {
+      pendingRaf = 0;
+      document.querySelectorAll<HTMLElement>('[data-lanyard]').forEach((el) => {
+        const raw = el.dataset.lanyard;
+        if (!raw) return;
+        const opts = JSON.parse(raw) as LanyardOptions;
+        cleanups.push(mountLanyard(el, opts));
+      });
     });
   }
 

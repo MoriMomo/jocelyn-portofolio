@@ -63,22 +63,29 @@ const options: GrainientProps = {
 
 <script>
   import { mountGrainient } from '../scripts/grainient/mount';
+  import { scheduleIdleMount } from '../scripts/webglUtils';
 
   let cleanups: Array<() => void> = [];
+  let cancelIdle: (() => void) | null = null;
 
-  function initAllGrainient(): void {
+  function teardownAllGrainient(): void {
+    cancelIdle?.();
+    cancelIdle = null;
     cleanups.forEach((fn) => fn());
     cleanups = [];
-    document.querySelectorAll<HTMLElement>('[data-grainient]').forEach((el) => {
-      cleanups.push(mountGrainient(el));
+  }
+
+  function initAllGrainient(): void {
+    teardownAllGrainient();
+    cancelIdle = scheduleIdleMount(() => {
+      document.querySelectorAll<HTMLElement>('[data-grainient]').forEach((el) => {
+        cleanups.push(mountGrainient(el));
+      });
     });
   }
 
   document.addEventListener('astro:page-load', initAllGrainient);
-  document.addEventListener('astro:before-swap', () => {
-    cleanups.forEach((fn) => fn());
-    cleanups = [];
-  });
+  document.addEventListener('astro:before-swap', teardownAllGrainient);
 </script>
 
 <style>

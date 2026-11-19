@@ -1,3 +1,4 @@
+import { createColorResolver } from '../webglUtils';
 import {
   COMPOSITE_SHADER,
   FIELD_SHADER,
@@ -64,27 +65,6 @@ function parseSettings(container: HTMLElement): GrainientSettings {
   } catch {
     return resolveGrainientSettings({});
   }
-}
-
-function createColorParser(): (value: string) => [number, number, number] {
-  const probe = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
-  const cache = new Map<string, [number, number, number]>();
-  return (value: string) => {
-    const key = String(value);
-    const cached = cache.get(key);
-    if (cached) return cached;
-    let rgb: [number, number, number] = [0, 0, 0];
-    if (probe) {
-      probe.clearRect(0, 0, 1, 1);
-      probe.fillStyle = '#000000';
-      probe.fillStyle = key;
-      probe.fillRect(0, 0, 1, 1);
-      const [r, g, b] = probe.getImageData(0, 0, 1, 1).data;
-      rgb = [r / 255, g / 255, b / 255];
-    }
-    cache.set(key, rgb);
-    return rgb;
-  };
 }
 
 function createLinearTarget(gl: WebGL2RenderingContext): WebGLTexture | null {
@@ -461,7 +441,7 @@ export function mountGrainient(container: HTMLElement): () => void {
   if (!ctx) return () => {};
 
   const s = parseSettings(container);
-  const parseColor = createColorParser();
+  const parseColor = createColorResolver({ fallback: '#000000', linear: false });
   const reduce = getReducedMotion();
   const view = { width: 1, height: 1, ratio: 1 };
   const fieldSize = { width: 0, height: 0 };
