@@ -14,7 +14,7 @@ const leadershipCount = sorted.filter((e) => e.data.category === 'Leadership & C
 const totalPad = String(sorted.length).padStart(2, '0');
 ---
 
-<section id="work" class="work-section surface-light hairline-top" aria-labelledby="work-heading">
+<section id="work" class="work-section surface-light" aria-labelledby="work-heading">
   <span id="leadership" class="sr-only" aria-hidden="true"></span>
   <div class="container">
     <div class="work-section__header" data-reveal="up">
@@ -327,9 +327,13 @@ const totalPad = String(sorted.length).padStart(2, '0');
   .work-section {
     padding-block: var(--space-2xl);
     position: relative;
-    background-color: var(--color-frost-elevated);
-    border-top: 1px solid rgba(18, 35, 54, 0.2);
-    border-bottom: 1px solid rgba(18, 35, 54, 0.2);
+    background: linear-gradient(
+      to bottom,
+      var(--color-frost) 0%,
+      var(--color-frost-elevated) 16%,
+      var(--color-frost-elevated) 84%,
+      var(--color-frost) 100%
+    );
   }
 
   .work-section__header {
