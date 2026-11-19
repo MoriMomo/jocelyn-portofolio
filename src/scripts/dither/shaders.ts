@@ -111,12 +111,13 @@ void main() {
     vec3 head = uTrail[0];
     vec2 delta = uv - head.xy;
     float dist = length(delta);
-    warp += (dist > 0.0001 ? delta / dist : vec2(0.0)) * sin(dist / max(uRadius, 0.001) * 16.0 - uTime * 7.0) * 0.04 * touch * uStrength;
+    warp += (dist > 0.0001 ? delta / dist : vec2(0.0)) * sin(dist / max(uRadius, 0.001) * 16.0 - uTime * 7.0) * 0.07 * touch * uStrength;
   }
 
   float f = pattern((uv + warp) / uScale);
   if (uEffect == 0) f -= 0.5 * touch * uStrength;
   if (uEffect == 1) f += 0.5 * touch * uStrength;
+  if (uEffect == 2) f += 0.38 * touch * uStrength;
   f += ring * 0.55;
   f = (f - 0.5) * uContrast + 0.5 + uBrightness;
   float show = clamp((uIntro * uReach - length(uv)) / 0.45, 0.0, 1.0);

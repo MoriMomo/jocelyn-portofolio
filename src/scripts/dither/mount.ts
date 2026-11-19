@@ -91,7 +91,8 @@ export function mountDither(container: HTMLElement): () => void {
   let visible = true;
 
   const allocate = (): void => {
-    view.cell = Math.max(1, Math.round(s.pixelSize * view.ratio));
+    const cssPixel = view.width < 640 ? Math.max(2, s.pixelSize - 1) : s.pixelSize;
+    view.cell = Math.max(1, Math.round(cssPixel * view.ratio));
     view.cellCss = view.cell / view.ratio;
     view.cols = Math.max(1, Math.ceil(canvas.width / view.cell));
     view.rows = Math.max(1, Math.ceil(canvas.height / view.cell));
@@ -123,6 +124,7 @@ export function mountDither(container: HTMLElement): () => void {
     }
 
     const eased = s.intro && !reduce ? state.reveal * state.reveal * (3 - 2 * state.reveal) : 1;
+    const vwScale = clamp(view.width / 1200, 0.58, 1.2);
 
     gl.bindVertexArray(vao);
     gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
@@ -135,11 +137,11 @@ export function mountDither(container: HTMLElement): () => void {
     gl.uniform1f(w.uWaveSpeed, s.waveSpeed);
     gl.uniform1f(w.uWaveFrequency, s.waveFrequency);
     gl.uniform1f(w.uWaveAmplitude, s.waveAmplitude);
-    gl.uniform1f(w.uScale, s.scale);
+    gl.uniform1f(w.uScale, s.scale * vwScale);
     gl.uniform1f(w.uContrast, s.contrast);
     gl.uniform1f(w.uBrightness, s.brightness);
     gl.uniform1i(w.uEffect, s.effect);
-    gl.uniform1f(w.uRadius, s.mouseRadius);
+    gl.uniform1f(w.uRadius, s.mouseRadius * clamp(vwScale, 0.7, 1.15));
     gl.uniform1f(w.uStrength, s.mouseStrength);
     gl.uniform3fv(w.uTrail, trailData);
     gl.uniform1i(w.uTrailCount, trailCount);
@@ -178,13 +180,17 @@ export function mountDither(container: HTMLElement): () => void {
     if (!s.disableAnimation && !reduce) state.time += dt;
 
     const engaged = s.enableMouseInteraction && pointer.inside && !reduce;
-    state.presence += ((engaged ? 1 : 0) - state.presence) * (1 - Math.exp(-dt / (engaged ? 0.12 : 0.35)));
+    state.presence += ((engaged ? 1 : 0) - state.presence) * (1 - Math.exp(-dt / (engaged ? 0.045 : 0.38)));
     if (pointer.set) {
       const [tx, ty] = toUv(pointer.x, pointer.y);
-      const follow = 1 - Math.exp(-dt / 0.06);
+      const follow = 1 - Math.exp(-dt / 0.025);
       const moved = Math.hypot(tx - state.hx, ty - state.hy);
       state.hx += (tx - state.hx) * follow;
       state.hy += (ty - state.hy) * follow;
+      if (engaged && moved > 0.09 && (!ripples.length || ripples[ripples.length - 1].age > 0.22)) {
+        ripples.push({ x: tx, y: ty, age: 0 });
+        if (ripples.length > MAX_RIPPLES) ripples.shift();
+      }
       const decay = Math.exp(-dt / (0.08 + s.trail * 0.7));
       trailPoints.forEach((point) => {
         point.weight *= decay;
