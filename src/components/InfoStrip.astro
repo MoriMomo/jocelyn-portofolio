@@ -28,10 +28,10 @@ const items = [
 
 <style>
   .info-strip {
-    background-color: var(--bg-dark);
-    color: var(--ink-light);
-    border-top: 1px solid var(--border-hairline-dark);
-    border-bottom: 1px solid var(--border-hairline-dark);
+    background-color: var(--color-navy);
+    color: var(--color-frost);
+    border-top: 1px solid rgba(87, 152, 215, 0.35);
+    border-bottom: 1px solid rgba(87, 152, 215, 0.35);
   }
 
   .info-strip__grid {
@@ -41,7 +41,7 @@ const items = [
 
   .info-strip__cell {
     padding: var(--space-md) var(--space-sm);
-    border-right: 1px solid var(--border-hairline-dark);
+    border-right: 1px solid rgba(230, 241, 250, 0.18);
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
@@ -58,16 +58,16 @@ const items = [
 
   .info-strip__label {
     font-size: 0.76rem;
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 0.02em;
-    color: var(--blue);
+    color: var(--color-pistachio);
   }
 
   .info-strip__value {
     font-size: 0.94rem;
     font-weight: 500;
     line-height: 1.4;
-    color: var(--ink-light);
+    color: var(--color-frost);
   }
 
   @media (max-width: 600px) {
@@ -80,7 +80,7 @@ const items = [
       padding-inline: 0;
       padding-block: var(--space-sm);
       border-right: none;
-      border-bottom: 1px solid var(--border-hairline-dark);
+      border-bottom: 1px solid rgba(230, 241, 250, 0.18);
     }
 
     .info-strip__cell:last-child {

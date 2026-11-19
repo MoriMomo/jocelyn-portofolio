@@ -112,12 +112,12 @@ const groups = [
   }
 
   .highlights__group-label {
-    font-size: 0.84rem;
-    font-weight: 600;
+    font-size: 0.88rem;
+    font-weight: 700;
     letter-spacing: 0.02em;
-    color: var(--color-denim-deep);
+    color: var(--color-navy);
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border-hairline);
+    border-bottom: 2px solid rgba(18, 35, 54, 0.22);
   }
 
   .highlights__grid {
@@ -129,24 +129,26 @@ const groups = [
   .highlight-card {
     padding: var(--space-md);
     border-radius: var(--radius-md);
-    border: 1px solid rgba(18, 35, 54, 0.1);
+    border: 1px solid rgba(18, 35, 54, 0.14);
     display: flex;
     flex-direction: column;
     gap: var(--space-xs);
   }
 
   .highlight-card--cream {
-    background-color: var(--color-frost-elevated);
-    border: 1px solid rgba(87, 152, 215, 0.28);
-    border-top: 2px solid var(--color-denim);
-    color: var(--color-navy);
+    background-color: var(--color-navy);
+    border: 1px solid rgba(87, 152, 215, 0.45);
+    border-top: 4px solid var(--color-denim);
+    color: var(--color-frost);
+    box-shadow: 0 14px 32px rgba(18, 35, 54, 0.14);
   }
 
   .highlight-card--blue {
-    background-color: rgba(185, 194, 85, 0.14);
-    border: 1px solid rgba(185, 194, 85, 0.45);
-    border-top: 2px solid var(--color-pistachio);
+    background-color: var(--color-pistachio);
+    border: 1px solid rgba(18, 35, 54, 0.28);
+    border-top: 4px solid var(--color-navy);
     color: var(--color-navy);
+    box-shadow: 0 14px 32px rgba(18, 35, 54, 0.1);
   }
 
   .highlight-card__top {
@@ -157,6 +159,14 @@ const groups = [
     border-bottom: 1px solid var(--border-hairline);
   }
 
+  .highlight-card--cream .highlight-card__top {
+    border-bottom-color: rgba(230, 241, 250, 0.18);
+  }
+
+  .highlight-card--blue .highlight-card__top {
+    border-bottom-color: rgba(18, 35, 54, 0.2);
+  }
+
   .highlight-card__metric {
     font-size: var(--step-2);
     font-weight: 600;
@@ -164,8 +174,12 @@ const groups = [
     white-space: nowrap;
   }
 
+  .highlight-card--cream .highlight-card__metric {
+    color: #74b4f0;
+  }
+
   .highlight-card--blue .highlight-card__metric {
-    color: var(--color-pistachio-deep);
+    color: var(--color-navy);
   }
 
   .highlight-card__tag {
@@ -173,6 +187,15 @@ const groups = [
     font-weight: 500;
     letter-spacing: 0.02em;
     color: var(--soil);
+  }
+
+  .highlight-card--cream .highlight-card__tag {
+    color: rgba(230, 241, 250, 0.76);
+  }
+
+  .highlight-card--blue .highlight-card__tag {
+    color: rgba(18, 35, 54, 0.78);
+    font-weight: 600;
   }
 
   .highlight-card__heading {
@@ -184,11 +207,29 @@ const groups = [
     padding-top: 0.25rem;
   }
 
+  .highlight-card--cream .highlight-card__heading {
+    color: var(--color-white);
+  }
+
+  .highlight-card--blue .highlight-card__heading {
+    color: var(--color-navy);
+  }
+
   .highlight-card__detail {
     font-size: 0.94rem;
     color: var(--ink);
     opacity: 0.88;
     line-height: 1.55;
+  }
+
+  .highlight-card--cream .highlight-card__detail {
+    color: rgba(230, 241, 250, 0.88);
+    opacity: 1;
+  }
+
+  .highlight-card--blue .highlight-card__detail {
+    color: var(--color-navy);
+    opacity: 0.92;
   }
 
   @media (max-width: 600px) {

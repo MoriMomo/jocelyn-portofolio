@@ -327,6 +327,9 @@ const totalPad = String(sorted.length).padStart(2, '0');
   .work-section {
     padding-block: var(--space-2xl);
     position: relative;
+    background-color: var(--color-frost-elevated);
+    border-top: 1px solid rgba(18, 35, 54, 0.2);
+    border-bottom: 1px solid rgba(18, 35, 54, 0.2);
   }
 
   .work-section__header {
@@ -369,7 +372,7 @@ const totalPad = String(sorted.length).padStart(2, '0');
     letter-spacing: 0.02em;
     background-color: transparent;
     color: var(--soil);
-    border: 1px solid rgba(18, 35, 54, 0.16);
+    border: 1px solid rgba(18, 35, 54, 0.28);
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: color var(--duration-fast) ease, background-color var(--duration-fast) ease, border-color var(--duration-fast) ease;
@@ -381,9 +384,9 @@ const totalPad = String(sorted.length).padStart(2, '0');
   }
 
   .work-filter__btn.is-active {
-    background-color: var(--color-pistachio);
-    color: var(--color-navy);
-    border-color: var(--color-pistachio);
+    background-color: var(--color-navy);
+    color: var(--color-pistachio);
+    border-color: var(--color-navy);
   }
 
   .work-table__head {
@@ -411,7 +414,7 @@ const totalPad = String(sorted.length).padStart(2, '0');
   }
 
   .work-row:hover {
-    background-color: rgba(255, 255, 255, 0.65);
+    background-color: var(--color-frost);
     padding-inline: var(--space-xs);
   }
 

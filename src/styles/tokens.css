@@ -32,7 +32,7 @@
   --blue: var(--color-denim-deep);
 
   /* Derived Hairlines & Tints */
-  --border-hairline: rgba(18, 35, 54, 0.12);
+  --border-hairline: rgba(18, 35, 54, 0.2);
   --border-hairline-dark: rgba(18, 35, 54, 0.14);
   --border-strong: rgba(87, 152, 215, 0.42);
   --border-strong-dark: rgba(18, 35, 54, 0.22);

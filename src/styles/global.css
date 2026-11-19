@@ -144,15 +144,15 @@ textarea {
 }
 
 .badge--blue {
-  background-color: var(--pistachio-tint);
-  border: 1px solid rgba(185, 194, 85, 0.65);
+  background-color: var(--color-pistachio);
+  border: 1px solid rgba(18, 35, 54, 0.25);
   color: var(--color-navy);
 }
 
 .badge--cream {
-  background-color: var(--blue-tint);
+  background-color: var(--color-denim);
   color: var(--color-navy);
-  border: 1px solid rgba(87, 152, 215, 0.36);
+  border: 1px solid rgba(18, 35, 54, 0.22);
 }
 
 .badge--red {
