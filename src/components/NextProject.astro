@@ -12,7 +12,7 @@ const num = String(next.data.order).padStart(2, '0');
 const totalStr = String(total).padStart(2, '0');
 ---
 
-<aside class="next-project hairline-top" aria-label="Next case study">
+<aside class="next-project" aria-label="Next case study">
   <div class="container">
     <a href={`${base}/work/${next.id}`} class="next-project__link" data-reveal="up">
       <div class="next-project__meta">
@@ -32,9 +32,34 @@ const totalStr = String(total).padStart(2, '0');
 
 <style>
   .next-project {
+    position: relative;
     margin-top: var(--space-2xl);
     padding-top: var(--space-xl);
-    padding-bottom: var(--space-2xl);
+    padding-bottom: calc(var(--space-2xl) + 5rem);
+  }
+
+  .next-project > .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .next-project::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: clamp(8rem, 16vh, 12rem);
+    background: linear-gradient(
+      to bottom,
+      rgba(18, 35, 54, 0) 0%,
+      rgba(18, 35, 54, 0.08) 24%,
+      rgba(18, 35, 54, 0.28) 48%,
+      rgba(18, 35, 54, 0.62) 74%,
+      var(--color-navy) 100%
+    );
+    pointer-events: none;
+    z-index: 0;
   }
 
   .next-project__link {
